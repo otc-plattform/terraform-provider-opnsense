@@ -6,8 +6,11 @@ import (
 	"strconv"
 
 	"github.com/browningluke/opnsense-go/pkg/api"
+	"github.com/browningluke/terraform-provider-opnsense/internal/service/acmeclient"
+	"github.com/browningluke/terraform-provider-opnsense/internal/service/cron"
 	"github.com/browningluke/terraform-provider-opnsense/internal/service/diagnostics"
 	"github.com/browningluke/terraform-provider-opnsense/internal/service/firewall"
+	"github.com/browningluke/terraform-provider-opnsense/internal/service/firmware"
 	"github.com/browningluke/terraform-provider-opnsense/internal/service/interfaces"
 	"github.com/browningluke/terraform-provider-opnsense/internal/service/ipsec"
 	"github.com/browningluke/terraform-provider-opnsense/internal/service/kea"
@@ -292,6 +295,9 @@ func (p *opnsenseProvider) Resources(ctx context.Context) []func() resource.Reso
 		routes.Resources(ctx),
 		unbound.Resources(ctx),
 		wireguard.Resources(ctx),
+		cron.Resources(ctx),
+		firmware.Resources(ctx),
+		acmeclient.Resources(ctx),
 	}
 
 	var resources []func() resource.Resource
@@ -312,6 +318,9 @@ func (p *opnsenseProvider) DataSources(ctx context.Context) []func() datasource.
 		routes.DataSources(ctx),
 		unbound.DataSources(ctx),
 		wireguard.DataSources(ctx),
+		cron.DataSources(ctx),
+		firmware.DataSources(ctx),
+		acmeclient.DataSources(ctx),
 	}
 
 	var dataSources []func() datasource.DataSource
