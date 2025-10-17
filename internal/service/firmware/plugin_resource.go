@@ -72,6 +72,7 @@ func (r *firmwarePluginResource) Create(ctx context.Context, req resource.Create
 	}
 
 	installed := false
+	try := 0
 	for range 10 {
 		installed, err = isInstalled(ctx, r.client, data.Package.ValueString())
 		if err != nil {
@@ -85,11 +86,19 @@ func (r *firmwarePluginResource) Create(ctx context.Context, req resource.Create
 		}
 
 		time.Sleep(time.Second * 5)
+		try++
 	}
 
 	if !installed {
 		resp.Diagnostics.AddError("Client Error", "Unable to install package: timeout")
 		return
+	}
+
+	// If we had to wait ins means the plugin was not yet installed.
+	// There seem to be a timing problem with the plugin settings not
+	// being available fast enough so we just wait another 15s here for now.
+	if try > 0 {
+		time.Sleep(time.Second * 15)
 	}
 
 	// Write logs using the tflog package
