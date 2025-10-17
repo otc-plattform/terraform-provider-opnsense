@@ -73,7 +73,7 @@ func (r *acmeclientSettingsResource) Create(ctx context.Context, req resource.Cr
 	}
 	if res != nil && res.Result == "failed" {
 		resp.Diagnostics.AddError("Client Error",
-			fmt.Sprintf("Unable to create acmeclient settings, got response: %v", res))
+			formatActionResultFailure("create ACME client settings", res))
 		return
 	}
 
@@ -128,7 +128,7 @@ func (r *acmeclientSettingsResource) Update(ctx context.Context, req resource.Up
 	}
 	if res != nil && res.Result == "failed" {
 		resp.Diagnostics.AddError("Client Error",
-			fmt.Sprintf("Unable to update acmeclient settings, got response: %v", res))
+			formatActionResultFailure("update ACME client settings", res))
 		return
 	}
 
@@ -167,7 +167,7 @@ func (r *acmeclientSettingsResource) Delete(ctx context.Context, req resource.De
 	}
 	if res != nil && res.Result == "failed" {
 		resp.Diagnostics.AddError("Client Error",
-			fmt.Sprintf("Unable to delete settings acmeclientSettings, got response: %v", res))
+			formatActionResultFailure("disable ACME client settings", res))
 		return
 	}
 }

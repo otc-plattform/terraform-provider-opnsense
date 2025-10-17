@@ -71,7 +71,7 @@ func (r *acmeclientAccountResource) Create(ctx context.Context, req resource.Cre
 
 	if result != nil && result.Result == "failed" {
 		resp.Diagnostics.AddError("Client Error",
-			fmt.Sprintf("Unable to create acmeclient account, got response: %v", result))
+			formatActionResultFailure("create ACME client account", result))
 		return
 	}
 
@@ -153,7 +153,7 @@ func (r *acmeclientAccountResource) Update(ctx context.Context, req resource.Upd
 
 	if result != nil && result.Result == "failed" {
 		resp.Diagnostics.AddError("Client Error",
-			fmt.Sprintf("Unable to update acmeclient account, got response: %v", result))
+			formatActionResultFailure("update ACME client account", result))
 		return
 	}
 
@@ -190,7 +190,7 @@ func (r *acmeclientAccountResource) Delete(ctx context.Context, req resource.Del
 
 	if result != nil && result.Result == "failed" {
 		resp.Diagnostics.AddError("Client Error",
-			fmt.Sprintf("Unable to delete acmeclient account, got response: %v", result))
+			formatActionResultFailure("delete ACME client account", result))
 		return
 	}
 }
