@@ -130,24 +130,34 @@ var dnsServiceOptions = []string{
 
 // acmeclientChallengeResourceModel describes the challenge resource data model.
 type acmeclientChallengeResourceModel struct {
-	Id                       types.String `tfsdk:"id"`
-	Enabled                  types.Bool   `tfsdk:"enabled"`
-	Name                     types.String `tfsdk:"name"`
-	Description              types.String `tfsdk:"description"`
-	Method                   types.String `tfsdk:"method"`
-	HTTPService              types.String `tfsdk:"http_service"`
-	HTTPOpnAutodiscovery     types.Bool   `tfsdk:"http_opn_autodiscovery"`
-	HTTPOpnInterface         types.String `tfsdk:"http_opn_interface"`
-	HTTPOpnIPAddresses       types.Set    `tfsdk:"http_opn_ipaddresses"`
-	HTTPHAProxyInject        types.Bool   `tfsdk:"http_haproxy_inject"`
-	HTTPHAProxyFrontends     types.Set    `tfsdk:"http_haproxy_frontends"`
-	TLSALPNService           types.String `tfsdk:"tlsalpn_service"`
-	TLSALPNAcmeAutodiscovery types.Bool   `tfsdk:"tlsalpn_acme_autodiscovery"`
-	TLSALPNAcmeInterface     types.String `tfsdk:"tlsalpn_acme_interface"`
-	TLSALPNAcmeIPAddresses   types.Set    `tfsdk:"tlsalpn_acme_ipaddresses"`
-	DNSService               types.String `tfsdk:"dns_service"`
-	DNSSleep                 types.Int64  `tfsdk:"dns_sleep"`
-	Parameters               types.Map    `tfsdk:"parameters"`
+	Id                          types.String `tfsdk:"id"`
+	Enabled                     types.Bool   `tfsdk:"enabled"`
+	Name                        types.String `tfsdk:"name"`
+	Description                 types.String `tfsdk:"description"`
+	Method                      types.String `tfsdk:"method"`
+	HTTPService                 types.String `tfsdk:"http_service"`
+	HTTPOpnAutodiscovery        types.Bool   `tfsdk:"http_opn_autodiscovery"`
+	HTTPOpnInterface            types.String `tfsdk:"http_opn_interface"`
+	HTTPOpnIPAddresses          types.Set    `tfsdk:"http_opn_ipaddresses"`
+	HTTPHAProxyInject           types.Bool   `tfsdk:"http_haproxy_inject"`
+	HTTPHAProxyFrontends        types.Set    `tfsdk:"http_haproxy_frontends"`
+	TLSALPNService              types.String `tfsdk:"tlsalpn_service"`
+	TLSALPNAcmeAutodiscovery    types.Bool   `tfsdk:"tlsalpn_acme_autodiscovery"`
+	TLSALPNAcmeInterface        types.String `tfsdk:"tlsalpn_acme_interface"`
+	TLSALPNAcmeIPAddresses      types.Set    `tfsdk:"tlsalpn_acme_ipaddresses"`
+	DNSService                  types.String `tfsdk:"dns_service"`
+	DNSSleep                    types.Int64  `tfsdk:"dns_sleep"`
+	DNSAwsID                    types.String `tfsdk:"dns_aws_id"`
+	DNSAwsSecret                types.String `tfsdk:"dns_aws_secret"`
+	DNSAzureSubscriptionID      types.String `tfsdk:"dns_azure_subscription_id"`
+	DNSAzureTenantID            types.String `tfsdk:"dns_azure_tenant_id"`
+	DNSAzureAppID               types.String `tfsdk:"dns_azure_app_id"`
+	DNSAzureClientSecret        types.String `tfsdk:"dns_azure_client_secret"`
+	DNSIonosPrefix              types.String `tfsdk:"dns_ionos_prefix"`
+	DNSIonosSecret              types.String `tfsdk:"dns_ionos_secret"`
+	DNSGoogleDomainsAccessToken types.String `tfsdk:"dns_google_domains_access_token"`
+	DNSGoogleDomainsZone        types.String `tfsdk:"dns_google_domains_zone"`
+	Parameters                  types.Map    `tfsdk:"parameters"`
 }
 
 func acmeclientChallengeResourceSchema() schema.Schema {
@@ -250,6 +260,66 @@ func acmeclientChallengeResourceSchema() schema.Schema {
 				Computed:            true,
 				Default:             int64default.StaticInt64(0),
 			},
+			"dns_aws_id": schema.StringAttribute{
+				MarkdownDescription: "AWS Route 53 access key ID.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_aws_secret": schema.StringAttribute{
+				MarkdownDescription: "AWS Route 53 secret access key.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_azure_subscription_id": schema.StringAttribute{
+				MarkdownDescription: "Azure DNS subscription ID.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_azure_tenant_id": schema.StringAttribute{
+				MarkdownDescription: "Azure DNS tenant ID.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_azure_app_id": schema.StringAttribute{
+				MarkdownDescription: "Azure DNS application ID.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_azure_client_secret": schema.StringAttribute{
+				MarkdownDescription: "Azure DNS client secret.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_ionos_prefix": schema.StringAttribute{
+				MarkdownDescription: "IONOS domain prefix.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_ionos_secret": schema.StringAttribute{
+				MarkdownDescription: "IONOS domain secret.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_google_domains_access_token": schema.StringAttribute{
+				MarkdownDescription: "Google Domains access token.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
+			"dns_google_domains_zone": schema.StringAttribute{
+				MarkdownDescription: "Google Domains managed zone name.",
+				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString(""),
+			},
 			"parameters": schema.MapAttribute{
 				ElementType:         types.StringType,
 				MarkdownDescription: "Additional provider-specific parameters (exact keys as expected by OPNsense, e.g. `dns_cf_token`).",
@@ -332,6 +402,46 @@ func acmeclientChallengeDataSourceSchema() dschema.Schema {
 			},
 			"dns_sleep": dschema.Int64Attribute{
 				MarkdownDescription: "Wait time after DNS updates.",
+				Computed:            true,
+			},
+			"dns_aws_id": dschema.StringAttribute{
+				MarkdownDescription: "AWS Route 53 access key ID.",
+				Computed:            true,
+			},
+			"dns_aws_secret": dschema.StringAttribute{
+				MarkdownDescription: "AWS Route 53 secret access key.",
+				Computed:            true,
+			},
+			"dns_azure_subscription_id": dschema.StringAttribute{
+				MarkdownDescription: "Azure DNS subscription ID.",
+				Computed:            true,
+			},
+			"dns_azure_tenant_id": dschema.StringAttribute{
+				MarkdownDescription: "Azure DNS tenant ID.",
+				Computed:            true,
+			},
+			"dns_azure_app_id": dschema.StringAttribute{
+				MarkdownDescription: "Azure DNS application ID.",
+				Computed:            true,
+			},
+			"dns_azure_client_secret": dschema.StringAttribute{
+				MarkdownDescription: "Azure DNS client secret.",
+				Computed:            true,
+			},
+			"dns_ionos_prefix": dschema.StringAttribute{
+				MarkdownDescription: "IONOS domain prefix.",
+				Computed:            true,
+			},
+			"dns_ionos_secret": dschema.StringAttribute{
+				MarkdownDescription: "IONOS domain secret.",
+				Computed:            true,
+			},
+			"dns_google_domains_access_token": dschema.StringAttribute{
+				MarkdownDescription: "Google Domains access token.",
+				Computed:            true,
+			},
+			"dns_google_domains_zone": dschema.StringAttribute{
+				MarkdownDescription: "Google Domains managed zone.",
 				Computed:            true,
 			},
 			"parameters": dschema.MapAttribute{

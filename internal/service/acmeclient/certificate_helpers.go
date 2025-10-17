@@ -17,21 +17,19 @@ import (
 func certificateResponseToModel(resp *acmeclient.CertificateGetResponse) acmeclientCertificateResourceModel {
 	cert := resp.Certificate
 
-	altNames := selectedOptionValues(cert.AltNames)
-
 	return acmeclientCertificateResourceModel{
 		Id:               types.StringNull(),
 		Enabled:          types.BoolValue(tools.StringToBool(cert.Enabled)),
 		Name:             stringValueOrNull(cert.Name),
 		Description:      stringValueOrNull(cert.Description),
-		AltNames:         stringSliceToSet(altNames),
+		AltNames:         stringSliceToSet(selectedOptionValues(cert.AltNames)),
 		Account:          stringValueFromOptionMap(cert.Account),
 		ValidationMethod: stringValueFromOptionMap(cert.ValidationMethod),
 		AutoRenewal:      types.BoolValue(tools.StringToBool(cert.AutoRenewal)),
 		RenewInterval:    types.Int64Value(tools.StringToInt64(cert.RenewInterval)),
 		KeyLength:        stringValueFromOptionMap(cert.KeyLength),
 		OCSP:             types.BoolValue(tools.StringToBool(cert.OCSP)),
-		RestartActions:   stringSliceToSet(cert.RestartActions),
+		RestartActions:   stringSliceToSet(selectedOptionKeys(cert.RestartActions)),
 		AliasMode:        stringValueFromOptionMap(cert.AliasMode),
 		DomainAlias:      stringValueOrNull(cert.DomainAlias),
 		ChallengeAlias:   stringValueOrNull(cert.ChallengeAlias),
@@ -134,12 +132,7 @@ func selectedOptionValues(options map[string]acmeclient.Option) []string {
 		return []string{}
 	}
 
-	type entry struct {
-		key   string
-		value string
-	}
-
-	var entries []entry
+	var entries []string
 	for key, option := range options {
 		if option.Selected != 1 {
 			continue
@@ -150,17 +143,28 @@ func selectedOptionValues(options map[string]acmeclient.Option) []string {
 			value = key
 		}
 
-		entries = append(entries, entry{key: key, value: value})
+		entries = append(entries, value)
 	}
 
 	sort.Slice(entries, func(i, j int) bool {
-		return entries[i].value < entries[j].value
+		return entries[i] < entries[j]
 	})
 
-	values := make([]string, 0, len(entries))
-	for _, e := range entries {
-		values = append(values, e.value)
+	return entries
+}
+
+func selectedOptionKeys(options map[string]acmeclient.Option) []string {
+	if len(options) == 0 {
+		return []string{}
 	}
 
-	return values
+	var keys []string
+	for key, option := range options {
+		if option.Selected == 1 {
+			keys = append(keys, key)
+		}
+	}
+
+	sort.Strings(keys)
+	return keys
 }
