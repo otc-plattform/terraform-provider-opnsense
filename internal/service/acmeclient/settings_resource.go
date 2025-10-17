@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/browningluke/opnsense-go/pkg/acmeclient"
 	"github.com/browningluke/opnsense-go/pkg/api"
 	"github.com/browningluke/opnsense-go/pkg/opnsense"
 	"github.com/browningluke/terraform-provider-opnsense/internal/tools"
@@ -64,14 +63,19 @@ func (r *acmeclientSettingsResource) Create(ctx context.Context, req resource.Cr
 		return
 	}
 
-	// Add settings acmeclientSettings to unbound
-	r.client.Acmeclient().ACMEClientSetSettings(ctx, acmeclient.SettingsSetRequest{
-		Settings: acmeclient.SettingsSetSettings{
-			Enabled: tools.BoolToString(data.Enabled.ValueBool()),
-
-			// TODO: fill other fields
-		},
-	})
+	// Add settings acmeclientSettings to OPNsense
+	settingsReq := data.toSettingsSetRequest()
+	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, settingsReq)
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error",
+			fmt.Sprintf("Unable to create acmeclient settings, got error: %s", err))
+		return
+	}
+	if res != nil && res.Result == "failed" {
+		resp.Diagnostics.AddError("Client Error",
+			fmt.Sprintf("Unable to create acmeclient settings, got response: %v", res))
+		return
+	}
 
 	// Write logs using the tflog package
 	tflog.Trace(ctx, "created a resource")
@@ -99,11 +103,7 @@ func (r *acmeclientSettingsResource) Read(ctx context.Context, req resource.Read
 	}
 
 	// Convert OPNsense struct to TF schema
-	resourceModel := acmeclientSettingsResourceModel{
-		Enabled: types.BoolValue(tools.StringToBool(settings.ACMEClient.Settings.Enabled)),
-
-		// TODO: convert rest of fields
-	}
+	resourceModel := settingsResponseToModel(settings)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &resourceModel)...)
@@ -119,7 +119,18 @@ func (r *acmeclientSettingsResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 
-	// Convert TF schema OPNsense struct
+	settingsReq := data.toSettingsSetRequest()
+	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, settingsReq)
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error",
+			fmt.Sprintf("Unable to update acmeclient settings, got error: %s", err))
+		return
+	}
+	if res != nil && res.Result == "failed" {
+		resp.Diagnostics.AddError("Client Error",
+			fmt.Sprintf("Unable to update acmeclient settings, got response: %v", res))
+		return
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -135,16 +146,28 @@ func (r *acmeclientSettingsResource) Delete(ctx context.Context, req resource.De
 		return
 	}
 
-	_, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, acmeclient.SettingsSetRequest{
-		Settings: acmeclient.SettingsSetSettings{
-			Enabled: tools.BoolToString(false),
+	settings, err := r.client.Acmeclient().ACMEClientGetSettings(ctx)
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error",
+			fmt.Sprintf("Unable to read current acmeclient settings during delete, got error: %s", err))
+		return
+	}
 
-			// TODO: fill other fields
-		},
-	})
+	resourceModel := settingsResponseToModel(settings)
+	resourceModel.Enabled = types.BoolValue(false)
+
+	settingsReq := resourceModel.toSettingsSetRequest()
+	settingsReq.Settings.Enabled = tools.BoolToString(false)
+
+	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, settingsReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to delete settings acmeclientSettings, got error: %s", err))
+		return
+	}
+	if res != nil && res.Result == "failed" {
+		resp.Diagnostics.AddError("Client Error",
+			fmt.Sprintf("Unable to delete settings acmeclientSettings, got response: %v", res))
 		return
 	}
 }

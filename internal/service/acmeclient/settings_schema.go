@@ -47,12 +47,12 @@ func acmeclientSettingsResourceSchema() schema.Schema {
 				Default:             booldefault.StaticBool(false),
 			},
 			"log_level": schema.StringAttribute{
-				MarkdownDescription: "Log level for ACME client (`debug`, `info`, `warning`, `error`).",
+				MarkdownDescription: "Log level for ACME client (`normal`, `extended`, `debug`, `debug2`, `debug3`).",
 				Optional:            true,
 				Computed:            true,
-				Default:             stringdefault.StaticString("info"),
+				Default:             stringdefault.StaticString("normal"),
 				Validators: []validator.String{
-					stringvalidator.OneOf("debug", "info", "warning", "error"),
+					stringvalidator.OneOf("normal", "extended", "debug", "debug2", "debug3"),
 				},
 			},
 			"show_intro": schema.BoolAttribute{
@@ -109,7 +109,7 @@ func acmeclientSettingsDataSourceSchema() dschema.Schema {
 				Computed:            true,
 			},
 			"log_level": dschema.StringAttribute{
-				MarkdownDescription: "Log level for the ACME client.",
+				MarkdownDescription: "Log level for the ACME client (`normal`, `extended`, `debug`, `debug2`, `debug3`).",
 				Computed:            true,
 			},
 			"show_intro": dschema.BoolAttribute{

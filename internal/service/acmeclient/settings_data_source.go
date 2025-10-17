@@ -6,9 +6,7 @@ import (
 
 	"github.com/browningluke/opnsense-go/pkg/api"
 	"github.com/browningluke/opnsense-go/pkg/opnsense"
-	"github.com/browningluke/terraform-provider-opnsense/internal/tools"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -69,11 +67,7 @@ func (d *acmeclientSettingsDataSource) Read(ctx context.Context, req datasource.
 	}
 
 	// Convert OPNsense struct to TF schema
-	resourceModel := acmeclientSettingsResourceModel{
-		Enabled: types.BoolValue(tools.StringToBool(settings.ACMEClient.Settings.Enabled)),
-
-		// TODO: convert rest of fields
-	}
+	resourceModel := settingsResponseToModel(settings)
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &resourceModel)...)
