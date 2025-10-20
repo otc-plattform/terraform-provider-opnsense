@@ -17,7 +17,7 @@ func upstreamResponseToModel(id string, resp *nginx.UpstreamGetResponse) nginxUp
 		Id:                     types.StringValue(id),
 		Description:            tools.StringOrNull(upstream.Description),
 		ServerEntries:          fieldOptionsToSet(upstream.ServerEntries),
-		LoadBalancingAlgorithm: fieldOptionsFirstKey(upstream.LoadBalancingAlgorithm),
+		LoadBalancingAlgorithm: types.StringValue(selectedOptionKey(upstream.LoadBalancingAlgorithm)),
 		ProxyProtocol:          types.BoolValue(tools.StringToBool(upstream.ProxyProtocol)),
 		Keepalive:              tools.StringOrNull(upstream.Keepalive),
 		KeepaliveRequests:      tools.StringOrNull(upstream.KeepaliveRequests),
@@ -25,11 +25,11 @@ func upstreamResponseToModel(id string, resp *nginx.UpstreamGetResponse) nginxUp
 		HostPort:               tools.StringOrNull(upstream.HostPort),
 		XForwardedHostVerbatim: types.BoolValue(tools.StringToBool(upstream.XForwardedHostVerbatim)),
 		TLSEnable:              types.BoolValue(tools.StringToBool(upstream.TLSEnable)),
-		TLSClientCertificate:   fieldOptionsFirstKey(upstream.TLSClientCertificate),
+		TLSClientCertificate:   tools.StringOrNull(selectedOptionKey(upstream.TLSClientCertificate)),
 		TLSNameOverride:        tools.StringOrNull(upstream.TLSNameOverride),
 		TLSProtocolVersions:    fieldOptionsToSet(upstream.TLSProtocolVersions),
 		TLSSessionReuse:        types.BoolValue(tools.StringToBool(upstream.TLSSessionReuse)),
-		TLSTrustedCertificate:  fieldOptionsFirstKey(upstream.TLSTrustedCertificate),
+		TLSTrustedCertificate:  tools.StringOrNull(selectedOptionKey(upstream.TLSTrustedCertificate)),
 		TLSVerify:              types.BoolValue(tools.StringToBool(upstream.TLSVerify)),
 		TLSVerifyDepth:         tools.StringOrNull(upstream.TLSVerifyDepth),
 		Store:                  types.BoolValue(tools.StringToBool(upstream.Store)),
@@ -81,14 +81,6 @@ func fieldOptionsToSet(options api.FieldOptions) types.Set {
 	return tools.StringSliceToSet(keys)
 }
 
-func fieldOptionsFirstKey(options api.FieldOptions) types.String {
-	keys := selectedFieldOptionKeys(options)
-	if len(keys) == 0 {
-		return types.StringNull()
-	}
-	return types.StringValue(keys[0])
-}
-
 func selectedFieldOptionKeys(options api.FieldOptions) []string {
 	if len(options) == 0 {
 		return []string{}
@@ -97,7 +89,17 @@ func selectedFieldOptionKeys(options api.FieldOptions) []string {
 	keys := make([]string, 0, len(options))
 	for key, option := range options {
 		if option.Selected == 1 {
-			keys = append(keys, key)
+			if key == "" && option.Value == "" {
+				continue
+			}
+			value := option.Value
+			if value == "" {
+				value = key
+			}
+			if value == "" {
+				continue
+			}
+			keys = append(keys, value)
 		}
 	}
 

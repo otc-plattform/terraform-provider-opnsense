@@ -3,7 +3,6 @@ package nginx
 import (
 	"context"
 
-	"github.com/browningluke/opnsense-go/pkg/api"
 	"github.com/browningluke/opnsense-go/pkg/nginx"
 	"github.com/browningluke/terraform-provider-opnsense/internal/tools"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -21,7 +20,7 @@ func upstreamServerResponseToModel(id string, resp *nginx.UpstreamServerGetRespo
 		MaxConns:    tools.StringOrNull(server.MaxConns),
 		MaxFails:    tools.StringOrNull(server.MaxFails),
 		FailTimeout: tools.StringOrNull(server.FailTimeout),
-		NoUse:       fieldOptionsFirstOption(server.NoUse),
+		NoUse:       tools.StringOrNull(selectedOptionKey(server.NoUse)),
 	}
 }
 
@@ -49,17 +48,4 @@ func fetchUpstreamServerModel(ctx context.Context, controller *nginx.Controller,
 	}
 
 	return upstreamServerResponseToModel(id, resp), nil
-}
-
-func fieldOptionsFirstOption(options api.FieldOptions) types.String {
-	for key, option := range options {
-		if option.Selected == 1 {
-			if key == "" {
-				return types.StringNull()
-			}
-			return types.StringValue(key)
-		}
-	}
-
-	return types.StringNull()
 }
