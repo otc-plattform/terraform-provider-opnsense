@@ -18,7 +18,7 @@ func locationResponseToModel(id string, resp *nginx.LocationGetResponse) nginxLo
 		Id:                      types.StringValue(id),
 		Description:             tools.StringOrNull(location.Description),
 		URLPattern:              tools.StringOrNull(location.URLPattern),
-		MatchType:               stringValueFromOptionMap(location.MatchType),
+		MatchType:               stringValueFromOptionMapEmpty(location.MatchType),
 		PathPrefix:              tools.StringOrNull(location.PathPrefix),
 		Upstream:                stringValueFromOptionMap(location.Upstream),
 		EnableSecRules:          types.BoolValue(tools.StringToBool(location.EnableSecRules)),
@@ -141,7 +141,7 @@ func joinStringSet(set types.Set) string {
 	}
 
 	values := tools.SetToStringSlice(set)
-	return strings.Join(values, "\n")
+	return strings.Join(values, ",")
 }
 
 func stringSliceToSet(values []string) types.Set {
@@ -166,6 +166,11 @@ func stringValueFromOptionMap(options api.FieldOptions) types.String {
 		return types.StringNull()
 	}
 
+	return types.StringValue(key)
+}
+
+func stringValueFromOptionMapEmpty(options api.FieldOptions) types.String {
+	key := selectedOptionKey(options)
 	return types.StringValue(key)
 }
 

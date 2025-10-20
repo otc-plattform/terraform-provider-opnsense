@@ -16,8 +16,8 @@ func httpServerResponseToModel(id string, resp *nginx.HTTPServerGetResponse) ngi
 	return nginxHTTPServerResourceModel{
 		Id:                             types.StringValue(id),
 		ServerName:                     stringValueFromOptionMap(server.ServerName),
-		ListenHTTPAddress:              stringValueFromOptionMap(server.ListenHTTPAddress),
-		ListenHTTPSAddress:             stringValueFromOptionMap(server.ListenHTTPSAddress),
+		ListenHTTPAddress:              types.StringValue(strings.Join(selectedOptionKeys(server.ListenHTTPAddress), ",")), // TODO: change to set
+		ListenHTTPSAddress:             types.StringValue(strings.Join(selectedOptionKeys(server.ListenHTTPSAddress), ",")),
 		DefaultServer:                  types.BoolValue(tools.StringToBool(server.DefaultServer)),
 		TLSRejectHandshake:             types.BoolValue(tools.StringToBool(server.TLSRejectHandshake)),
 		SyslogTargets:                  stringSliceToSet(server.SyslogTargets),

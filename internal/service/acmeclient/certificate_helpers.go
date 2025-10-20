@@ -23,7 +23,7 @@ func certificateResponseToModel(resp *acmeclient.CertificateGetResponse) acmecli
 		Enabled:          types.BoolValue(tools.StringToBool(cert.Enabled)),
 		Name:             stringValueOrNull(cert.Name),
 		Description:      stringValueOrNull(cert.Description),
-		AltNames:         stringSliceToSet(selectedOptionValues(cert.AltNames)),
+		AltNames:         tools.StringSliceToSet(selectedOptionValues(cert.AltNames)),
 		Account:          stringValueFromOptionMap(cert.Account),
 		ValidationMethod: stringValueFromOptionMap(cert.ValidationMethod),
 		AutoRenewal:      types.BoolValue(tools.StringToBool(cert.AutoRenewal)),

@@ -73,7 +73,7 @@ func (r *firmwarePluginResource) Create(ctx context.Context, req resource.Create
 
 	installed := false
 	try := 0
-	for range 10 {
+	for range 100 {
 		installed, err = isInstalled(ctx, r.client, data.Package.ValueString())
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error",
