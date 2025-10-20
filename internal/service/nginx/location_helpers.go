@@ -2,8 +2,10 @@ package nginx
 
 import (
 	"context"
+	"sort"
 	"strings"
 
+	"github.com/browningluke/opnsense-go/pkg/api"
 	"github.com/browningluke/opnsense-go/pkg/nginx"
 	"github.com/browningluke/terraform-provider-opnsense/internal/tools"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -158,7 +160,7 @@ func stringValue(value types.String) string {
 	return value.ValueString()
 }
 
-func stringValueFromOptionMap(options map[string]nginx.Option) types.String {
+func stringValueFromOptionMap(options api.FieldOptions) types.String {
 	key := selectedOptionKey(options)
 	if key == "" {
 		return types.StringNull()
@@ -167,12 +169,30 @@ func stringValueFromOptionMap(options map[string]nginx.Option) types.String {
 	return types.StringValue(key)
 }
 
-func selectedOptionKey(options map[string]nginx.Option) string {
-	for key, option := range options {
-		if option.Selected == 1 {
-			return key
-		}
+func optionMapToSet(options api.FieldOptions) types.Set {
+	keys := selectedOptionKeys(options)
+	if len(keys) == 0 {
+		return types.SetNull(types.StringType)
 	}
 
-	return ""
+	return tools.StringSliceToSet(keys)
+}
+
+func selectedOptionKeys(options api.FieldOptions) []string {
+	var keys []string
+	for key, option := range options {
+		if option.Selected == 1 {
+			keys = append(keys, key)
+		}
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func selectedOptionKey(options api.FieldOptions) string {
+	keys := selectedOptionKeys(options)
+	if len(keys) == 0 {
+		return ""
+	}
+	return keys[0]
 }

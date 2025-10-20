@@ -2,6 +2,7 @@ package acmeclient
 
 import (
 	"github.com/browningluke/opnsense-go/pkg/acmeclient"
+	"github.com/browningluke/opnsense-go/pkg/api"
 	"github.com/browningluke/terraform-provider-opnsense/internal/tools"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -40,7 +41,7 @@ func (m *acmeclientSettingsResourceModel) toSettingsSetRequest() acmeclient.Sett
 	}
 }
 
-func stringValueFromOptionMap(options map[string]acmeclient.Option) types.String {
+func stringValueFromOptionMap(options api.FieldOptions) types.String {
 	value := selectedOptionKey(options)
 	if value == "" {
 		return types.StringNull()
@@ -48,7 +49,7 @@ func stringValueFromOptionMap(options map[string]acmeclient.Option) types.String
 	return types.StringValue(value)
 }
 
-func selectedOptionKey(options map[string]acmeclient.Option) string {
+func selectedOptionKey(options api.FieldOptions) string {
 	for key, option := range options {
 		if option.Selected == 1 {
 			return key

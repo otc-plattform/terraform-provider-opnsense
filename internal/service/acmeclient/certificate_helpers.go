@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/browningluke/opnsense-go/pkg/acmeclient"
+	"github.com/browningluke/opnsense-go/pkg/api"
 	"github.com/browningluke/opnsense-go/pkg/errs"
 	"github.com/browningluke/terraform-provider-opnsense/internal/tools"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -127,7 +128,7 @@ func (m *acmeclientCertificateResourceModel) toCertificate(ctx context.Context) 
 	return cert, nil
 }
 
-func selectedOptionValues(options map[string]acmeclient.Option) []string {
+func selectedOptionValues(options api.FieldOptions) []string {
 	if len(options) == 0 {
 		return []string{}
 	}
@@ -153,7 +154,7 @@ func selectedOptionValues(options map[string]acmeclient.Option) []string {
 	return entries
 }
 
-func selectedOptionKeys(options map[string]acmeclient.Option) []string {
+func selectedOptionKeys(options api.FieldOptions) []string {
 	if len(options) == 0 {
 		return []string{}
 	}
