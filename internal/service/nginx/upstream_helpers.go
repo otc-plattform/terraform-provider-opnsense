@@ -16,7 +16,7 @@ func upstreamResponseToModel(id string, resp *nginx.UpstreamGetResponse) nginxUp
 	return nginxUpstreamResourceModel{
 		Id:                     types.StringValue(id),
 		Description:            tools.StringOrNull(upstream.Description),
-		ServerEntries:          fieldOptionsToSet(upstream.ServerEntries),
+		ServerEntries:          stringSliceToSet(selectedOptionKeys(upstream.ServerEntries)),
 		LoadBalancingAlgorithm: types.StringValue(selectedOptionKey(upstream.LoadBalancingAlgorithm)),
 		ProxyProtocol:          types.BoolValue(tools.StringToBool(upstream.ProxyProtocol)),
 		Keepalive:              tools.StringOrNull(upstream.Keepalive),
