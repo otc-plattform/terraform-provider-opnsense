@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/browningluke/opnsense-go/pkg/api"
 	"github.com/browningluke/opnsense-go/pkg/errs"
@@ -87,6 +88,36 @@ func (r *acmeclientCertificateResource) Create(ctx context.Context, req resource
 	if data.Id.IsNull() || data.Id.ValueString() == "" {
 		resp.Diagnostics.AddError("Client Error", "API did not return an identifier for the new acmeclient certificate.")
 		return
+	}
+
+	// If the certificate is enabled we wait for success
+	if certificate.Enabled == "1" {
+		success := false
+		for range 60 {
+			res, err := r.client.Acmeclient().ACMEClientSearchCert(ctx)
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error",
+					fmt.Sprintf("Unable to wait for acmeclient certificate state, got error: %s", err))
+				return
+			}
+			if result != nil && result.Result == "failed" {
+				resp.Diagnostics.AddError("Client Error",
+					formatActionResultFailure("wait for acmeclient certificate state", result))
+				return
+			}
+
+			for i := range res.Rows {
+				if res.Rows[i].UUID == result.UUID && res.Rows[i].StatusCode == "200" {
+					success = true
+				}
+			}
+
+			if success {
+				break
+			}
+
+			time.Sleep(time.Second * 5)
+		}
 	}
 
 	certModel, err := fetchCertificateModel(ctx, r.client.Acmeclient(), data.Id.ValueString())
