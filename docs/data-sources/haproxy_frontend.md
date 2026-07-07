@@ -3,12 +3,12 @@
 page_title: "opnsense_haproxy_frontend Data Source - terraform-provider-opnsense"
 subcategory: ""
 description: |-
-  Read an OPNsense HAProxy public service using the raw HAProxy API payload.
+  Read an OPNsense HAProxy public service.
 ---
 
 # opnsense_haproxy_frontend (Data Source)
 
-Read an OPNsense HAProxy public service using the raw HAProxy API payload.
+Read an OPNsense HAProxy public service.
 
 
 
@@ -17,8 +17,75 @@ Read an OPNsense HAProxy public service using the raw HAProxy API payload.
 
 ### Required
 
-- `id` (String) UUID assigned by OPNsense.
+- `id` (String) UUID of the haproxy frontend.
 
 ### Read-Only
 
-- `config` (Map of String) Raw HAProxy settings payload as string values. Keys match OPNsense API field names.
+- `advertised_protocols` (Set of String) Selected advertised_protocols values for this frontend. One or more of: h3, h2, http11, http10.
+- `basic_auth_enabled` (Boolean) Enable the basic_auth_enabled option for this frontend.
+- `basic_auth_groups` (Set of String) List of basic_auth_groups values for this frontend.
+- `basic_auth_users` (Set of String) List of basic_auth_users values for this frontend.
+- `bind` (Set of String) List of bind values for this frontend.
+- `bind_options` (String) Frontend bind_options value.
+- `connection_behaviour` (String) Frontend connection_behaviour option. One of: http-keep-alive, httpclose, http-server-close.
+- `custom_options` (String) Frontend custom_options value.
+- `default_backend` (String) Frontend default_backend (UUID reference).
+- `description` (String) Frontend description value.
+- `enabled` (Boolean) Enable the enabled option for this frontend.
+- `forward_for` (String) Frontend forward_for value.
+- `http2_enabled` (Boolean) Enable the http2_enabled option for this frontend.
+- `http2_enabled_nontls` (Boolean) Enable the http2_enabled_nontls option for this frontend.
+- `internal_id` (String) Frontend internal_id value.
+- `linked_actions` (Set of String) List of linked_actions values for this frontend.
+- `linked_cpu_affinity_rules` (Set of String) List of linked_cpu_affinity_rules values for this frontend.
+- `linked_errorfiles` (Set of String) List of linked_errorfiles values for this frontend.
+- `logging_detailed_log` (Boolean) Enable the logging_detailed_log option for this frontend.
+- `logging_dont_log_normal` (Boolean) Enable the logging_dont_log_normal option for this frontend.
+- `logging_dont_log_null` (Boolean) Enable the logging_dont_log_null option for this frontend.
+- `logging_log_separate_errors` (Boolean) Enable the logging_log_separate_errors option for this frontend.
+- `logging_socket_stats` (Boolean) Enable the logging_socket_stats option for this frontend.
+- `mode` (String) Frontend mode option. One of: http, ssl, tcp.
+- `name` (String) Frontend name value.
+- `prometheus_enabled` (Boolean) Enable the prometheus_enabled option for this frontend.
+- `prometheus_path` (String) Frontend prometheus_path value.
+- `ssl_advanced_enabled` (Boolean) Enable the ssl_advanced_enabled option for this frontend.
+- `ssl_bind_options` (Set of String) Selected ssl_bind_options values for this frontend. One or more of: no-sslv3, no-tlsv10, no-tlsv11, no-tlsv12, no-tlsv13, no-tls-tickets, force-sslv3, force-tlsv10, force-tlsv11, force-tlsv12, force-tlsv13, prefer-client-ciphers, strict-sni.
+- `ssl_certificates` (Set of String) List of ssl_certificates values for this frontend.
+- `ssl_cipher_list` (String) Frontend ssl_cipher_list value.
+- `ssl_cipher_suites` (String) Frontend ssl_cipher_suites value.
+- `ssl_client_auth_c_as` (Set of String) List of ssl_client_auth_c_as values for this frontend.
+- `ssl_client_auth_c_r_ls` (Set of String) List of ssl_client_auth_c_r_ls values for this frontend.
+- `ssl_client_auth_enabled` (Boolean) Enable the ssl_client_auth_enabled option for this frontend.
+- `ssl_client_auth_verify` (String) Frontend ssl_client_auth_verify option. One of: , none, optional, required.
+- `ssl_custom_options` (String) Frontend ssl_custom_options value.
+- `ssl_default_certificate` (String) Frontend ssl_default_certificate (UUID reference).
+- `ssl_enabled` (Boolean) Enable the ssl_enabled option for this frontend.
+- `ssl_hsts_enabled` (Boolean) Enable the ssl_hsts_enabled option for this frontend.
+- `ssl_hsts_include_sub_domains` (Boolean) Enable the ssl_hsts_include_sub_domains option for this frontend.
+- `ssl_hsts_max_age` (String) Frontend ssl_hsts_max_age value.
+- `ssl_hsts_preload` (Boolean) Enable the ssl_hsts_preload option for this frontend.
+- `ssl_max_version` (String) Frontend ssl_max_version option. One of: , SSLv3, TLSv1.0, TLSv1.1, TLSv1.2, TLSv1.3.
+- `ssl_min_version` (String) Frontend ssl_min_version option. One of: , SSLv3, TLSv1.0, TLSv1.1, TLSv1.2, TLSv1.3.
+- `stickiness_bytes_in_rate_period` (String) Frontend stickiness_bytes_in_rate_period value.
+- `stickiness_bytes_out_rate_period` (String) Frontend stickiness_bytes_out_rate_period value.
+- `stickiness_conn_rate_period` (String) Frontend stickiness_conn_rate_period value.
+- `stickiness_counter` (String) Frontend stickiness_counter value.
+- `stickiness_counter_key` (String) Frontend stickiness_counter_key value.
+- `stickiness_data_types` (Set of String) Selected stickiness_data_types values for this frontend. One or more of: bytes_in_cnt, bytes_in_rate, bytes_out_cnt, bytes_out_rate, conn_cnt, conn_cur, conn_rate, glitch_cnt, glitch_rate, gpc, gpc_rate, gpc0, gpc0_rate, gpc1, gpc1_rate, gpt, gpt0, http_err_cnt, http_err_rate, http_fail_cnt, http_fail_rate, http_req_cnt, http_req_rate, server_id, sess_cnt, sess_rate.
+- `stickiness_expire` (String) Frontend stickiness_expire value.
+- `stickiness_glitch_rate_period` (String) Frontend stickiness_glitch_rate_period value.
+- `stickiness_gpc_elements` (String) Frontend stickiness_gpc_elements value.
+- `stickiness_gpc_rate_period` (String) Frontend stickiness_gpc_rate_period value.
+- `stickiness_gpt_elements` (String) Frontend stickiness_gpt_elements value.
+- `stickiness_http_err_rate_period` (String) Frontend stickiness_http_err_rate_period value.
+- `stickiness_http_fail_rate_period` (String) Frontend stickiness_http_fail_rate_period value.
+- `stickiness_http_req_rate_period` (String) Frontend stickiness_http_req_rate_period value.
+- `stickiness_length` (String) Frontend stickiness_length value.
+- `stickiness_pattern` (String) Frontend stickiness_pattern option. One of: , binary, integer, ipv4, ipv6, string.
+- `stickiness_sess_rate_period` (String) Frontend stickiness_sess_rate_period value.
+- `stickiness_size` (String) Frontend stickiness_size value.
+- `tuning_max_connections` (String) Frontend tuning_max_connections value.
+- `tuning_shards` (String) Frontend tuning_shards value.
+- `tuning_timeout_client` (String) Frontend tuning_timeout_client value.
+- `tuning_timeout_http_keep_alive` (String) Frontend tuning_timeout_http_keep_alive value.
+- `tuning_timeout_http_req` (String) Frontend tuning_timeout_http_req value.

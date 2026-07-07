@@ -1,12 +1,12 @@
 ---
 page_title: "opnsense_haproxy_backend Resource - terraform-provider-opnsense"
 description: |-
-  Manage an OPNsense HAProxy backend pool using the raw HAProxy API payload.
+  Manage an OPNsense HAProxy backend pool.
 ---
 
 # opnsense_haproxy_backend (Resource)
 
-Manage an OPNsense HAProxy backend pool using the raw HAProxy API payload.
+Manage an OPNsense HAProxy backend pool.
 
 ## Example Usage
 
@@ -25,38 +25,28 @@ resource "opnsense_haproxy_server" "app" {
 }
 
 resource "opnsense_haproxy_backend" "app" {
-  config = {
-    enabled                   = "0"
-    name                      = "example_app_backend"
-    description               = "Example HAProxy backend pool"
-    mode                      = "http"
-    algorithm                 = "source"
-    random_draws              = "2"
-    proxyProtocol             = ""
-    linkedServers             = opnsense_haproxy_server.app.id
-    linkedFcgi                = ""
-    linkedResolver            = ""
-    resolverOpts              = ""
-    resolvePrefer             = ""
-    source                    = ""
-    healthCheckEnabled        = "0"
-    healthCheck               = ""
-    healthCheckLogStatus      = "0"
-    healthCheckProxyProto     = "backend"
-    http2Enabled              = "1"
-    http2Enabled_nontls       = "0"
-    ba_advertised_protocols   = "h2,http11"
-    forwardFor                = "0"
-    forwardedHeader           = "0"
-    forwardedHeaderParameters = ""
-    persistence               = ""
-    customOptions             = ""
-    tuning_noport             = "0"
-    tuning_httpreuse          = "safe"
-    tuning_caching            = "0"
-    linkedActions             = ""
-    linkedErrorfiles          = ""
-  }
+  enabled                  = false
+  name                     = "example_app_backend"
+  description              = "Example HAProxy backend pool"
+  mode                     = "http"
+  algorithm                = "source"
+  random_draws             = "2"
+  linked_servers           = [opnsense_haproxy_server.app.id]
+  health_check_enabled     = false
+  health_check_proxy_proto = "backend"
+  http2_enabled            = true
+  http2_enabled_nontls     = false
+  ba_advertised_protocols  = ["h2", "http11"]
+  persistence              = "sticktable"
+  persistence_cookiemode   = "piggyback"
+  persistence_cookiename   = "SRVCOOKIE"
+  persistence_stripquotes  = true
+  stickiness_pattern       = "sourceipv4"
+  stickiness_expire        = "30m"
+  stickiness_size          = "50k"
+  tuning_noport            = false
+  tuning_httpreuse         = "safe"
+  tuning_caching           = false
 }
 ```
 
@@ -65,11 +55,78 @@ resource "opnsense_haproxy_backend" "app" {
 
 ### Required
 
-- `config` (Map of String) Raw HAProxy settings payload as string values. Keys match OPNsense API field names.
+- `name` (String) Backend name value.
+
+### Optional
+
+- `algorithm` (String) Backend algorithm option. One of: source, roundrobin, static-rr, leastconn, uri, random.
+- `ba_advertised_protocols` (Set of String) Selected ba_advertised_protocols values for this backend. One or more of: h2, http11, http10.
+- `basic_auth_enabled` (Boolean) Enable the basic_auth_enabled option for this backend.
+- `basic_auth_groups` (Set of String) List of basic_auth_groups values for this backend.
+- `basic_auth_users` (Set of String) List of basic_auth_users values for this backend.
+- `check_down_interval` (String) Backend check_down_interval value.
+- `check_interval` (String) Backend check_interval value.
+- `custom_options` (String) Backend custom_options value.
+- `description` (String) Backend description value.
+- `enabled` (Boolean) Enable the enabled option for this backend.
+- `forward_for` (String) Backend forward_for value.
+- `forwarded_header` (String) Backend forwarded_header value.
+- `forwarded_header_parameters` (Set of String) Selected forwarded_header_parameters values for this backend. One or more of: proto, host, by, by_port, for, for_port.
+- `health_check` (String) Backend health_check (UUID reference).
+- `health_check_enabled` (Boolean) Enable the health_check_enabled option for this backend.
+- `health_check_fall` (String) Backend health_check_fall value.
+- `health_check_log_status` (String) Backend health_check_log_status value.
+- `health_check_proxy_proto` (String) Backend health_check_proxy_proto option. One of: , backend, enable, disable.
+- `health_check_rise` (String) Backend health_check_rise value.
+- `http2_enabled` (Boolean) Enable the http2_enabled option for this backend.
+- `http2_enabled_nontls` (Boolean) Enable the http2_enabled_nontls option for this backend.
+- `linked_actions` (Set of String) List of linked_actions values for this backend.
+- `linked_errorfiles` (Set of String) List of linked_errorfiles values for this backend.
+- `linked_fcgi` (String) Backend linked_fcgi (UUID reference).
+- `linked_mailer` (String) Backend linked_mailer (UUID reference).
+- `linked_resolver` (String) Backend linked_resolver (UUID reference).
+- `linked_servers` (Set of String) List of linked_servers values for this backend.
+- `mode` (String) Backend mode option. One of: http, tcp.
+- `persistence` (String) Backend persistence option. One of: , sticktable, cookie.
+- `persistence_cookiemode` (String) Backend persistence_cookiemode option. One of: piggyback, new.
+- `persistence_cookiename` (String) Backend persistence_cookiename value.
+- `persistence_stripquotes` (Boolean) Enable the persistence_stripquotes option for this backend.
+- `proxy_protocol` (String) Backend proxy_protocol option. One of: , v1, v2.
+- `random_draws` (String) Backend random_draws value.
+- `resolve_prefer` (String) Backend resolve_prefer option. One of: , ipv4, ipv6.
+- `resolver_opts` (Set of String) Selected resolver_opts values for this backend. One or more of: allow-dup-ip, ignore-weight, prevent-dup-ip.
+- `source` (String) Backend source value.
+- `stickiness_bytes_in_rate_period` (String) Backend stickiness_bytes_in_rate_period value.
+- `stickiness_bytes_out_rate_period` (String) Backend stickiness_bytes_out_rate_period value.
+- `stickiness_conn_rate_period` (String) Backend stickiness_conn_rate_period value.
+- `stickiness_cookielength` (String) Backend stickiness_cookielength value.
+- `stickiness_cookiename` (String) Backend stickiness_cookiename value.
+- `stickiness_data_types` (Set of String) Selected stickiness_data_types values for this backend. One or more of: bytes_in_cnt, bytes_in_rate, bytes_out_cnt, bytes_out_rate, conn_cnt, conn_cur, conn_rate, glitch_cnt, glitch_rate, gpc, gpc_rate, gpc0, gpc0_rate, gpc1, gpc1_rate, gpt, gpt0, http_err_cnt, http_err_rate, http_fail_cnt, http_fail_rate, http_req_cnt, http_req_rate, server_id, sess_cnt, sess_rate.
+- `stickiness_expire` (String) Expiration time for the stickiness table (e.g. `30m`). Required by OPNsense when stickiness is configured.
+- `stickiness_glitch_rate_period` (String) Backend stickiness_glitch_rate_period value.
+- `stickiness_gpc_elements` (String) Backend stickiness_gpc_elements value.
+- `stickiness_gpc_rate_period` (String) Backend stickiness_gpc_rate_period value.
+- `stickiness_gpt_elements` (String) Backend stickiness_gpt_elements value.
+- `stickiness_http_err_rate_period` (String) Backend stickiness_http_err_rate_period value.
+- `stickiness_http_fail_rate_period` (String) Backend stickiness_http_fail_rate_period value.
+- `stickiness_http_req_rate_period` (String) Backend stickiness_http_req_rate_period value.
+- `stickiness_length` (String) Backend stickiness_length value.
+- `stickiness_pattern` (String) Backend stickiness_pattern option. One of: , binary, cookievalue, integer, rdpcookie, sourceipv4, sourceipv6, string.
+- `stickiness_sess_rate_period` (String) Backend stickiness_sess_rate_period value.
+- `stickiness_size` (String) Size of the stickiness table (e.g. `50k`). Required by OPNsense when stickiness is configured.
+- `tuning_caching` (Boolean) Enable the tuning_caching option for this backend.
+- `tuning_defaultserver` (String) Backend tuning_defaultserver value.
+- `tuning_httpreuse` (String) Backend tuning_httpreuse option. One of: , never, safe, aggressive, always.
+- `tuning_noport` (Boolean) Enable the tuning_noport option for this backend.
+- `tuning_retries` (String) Backend tuning_retries value.
+- `tuning_timeout_check` (String) Backend tuning_timeout_check value.
+- `tuning_timeout_connect` (String) Backend tuning_timeout_connect value.
+- `tuning_timeout_server` (String) Backend tuning_timeout_server value.
 
 ### Read-Only
 
-- `id` (String) UUID assigned by OPNsense.
+- `id` (String) UUID of the haproxy backend.
+- `internal_id` (String) Internal OPNsense id assigned to this haproxy backend.
 
 ## Import
 

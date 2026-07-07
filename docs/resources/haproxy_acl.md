@@ -1,25 +1,23 @@
 ---
 page_title: "opnsense_haproxy_acl Resource - terraform-provider-opnsense"
 description: |-
-  Manage an OPNsense HAProxy condition/ACL using the raw HAProxy API payload.
+  Manage an OPNsense HAProxy condition/ACL.
 ---
 
 # opnsense_haproxy_acl (Resource)
 
-Manage an OPNsense HAProxy condition/ACL using the raw HAProxy API payload.
+Manage an OPNsense HAProxy condition/ACL.
 
 ## Example Usage
 
 ```terraform
 resource "opnsense_haproxy_acl" "acme_challenge" {
-  config = {
-    name          = "example_acme_challenge"
-    description   = "Match ACME HTTP-01 challenge requests"
-    expression    = "path_beg"
-    negate        = "0"
-    caseSensitive = "0"
-    path_beg      = "/.well-known/acme-challenge/"
-  }
+  name           = "example_acme_challenge"
+  description    = "Match ACME HTTP-01 challenge requests"
+  expression     = "path_beg"
+  negate         = false
+  case_sensitive = false
+  path_beg       = "/.well-known/acme-challenge/"
 }
 ```
 
@@ -28,11 +26,246 @@ resource "opnsense_haproxy_acl" "acme_challenge" {
 
 ### Required
 
-- `config` (Map of String) Raw HAProxy settings payload as string values. Keys match OPNsense API field names.
+- `name` (String) ACL name value.
+
+### Optional
+
+- `allowed_groups` (Set of String) List of allowed_groups values for this acl.
+- `allowed_users` (Set of String) List of allowed_users values for this acl.
+- `case_sensitive` (Boolean) Enable the case_sensitive option for this acl.
+- `converter` (String) ACL converter value.
+- `cust_hdr` (String) ACL cust_hdr value.
+- `cust_hdr_beg` (String) ACL cust_hdr_beg value.
+- `cust_hdr_beg_name` (String) ACL cust_hdr_beg_name value.
+- `cust_hdr_end` (String) ACL cust_hdr_end value.
+- `cust_hdr_end_name` (String) ACL cust_hdr_end_name value.
+- `cust_hdr_name` (String) ACL cust_hdr_name value.
+- `cust_hdr_reg` (String) ACL cust_hdr_reg value.
+- `cust_hdr_reg_name` (String) ACL cust_hdr_reg_name value.
+- `cust_hdr_sub` (String) ACL cust_hdr_sub value.
+- `cust_hdr_sub_name` (String) ACL cust_hdr_sub_name value.
+- `custom_acl` (String) ACL custom_acl value.
+- `description` (String) ACL description value.
+- `expression` (String) ACL expression option. One of: cust_hdr_beg, cust_hdr_end, cust_hdr, cust_hdr_reg, cust_hdr_sub, hdr_beg, hdr_end, hdr, hdr_reg, hdr_sub, http_auth, http_method, nbsrv, path_beg, path_dir, path_end, path, path_reg, path_sub, quic_enabled, traffic_is_http, traffic_is_ssl, sc_bytes_in_rate, sc_bytes_out_rate, sc_clr_gpc, sc_clr_gpc0, sc_clr_gpc1, sc0_clr_gpc0, sc0_clr_gpc1, sc1_clr_gpc, sc1_clr_gpc0, sc1_clr_gpc1, sc2_clr_gpc, sc2_clr_gpc0, sc2_clr_gpc1, sc_conn_cnt, sc_conn_cur, sc_conn_rate, sc_get_gpc, sc_get_gpc0, sc_get_gpc1, sc0_get_gpc0, sc0_get_gpc1, sc1_get_gpc0, sc1_get_gpc1, sc2_get_gpc0, sc2_get_gpc1, sc_get_gpt, sc_get_gpt0, sc0_get_gpt0, sc1_get_gpt0, sc2_get_gpt0, sc_glitch_cnt, sc_glitch_rate, sc_gpc_rate, sc_gpc0_rate, sc_gpc1_rate, sc0_gpc0_rate, sc0_gpc1_rate, sc1_gpc0_rate, sc1_gpc1_rate, sc2_gpc0_rate, sc2_gpc1_rate, sc_http_err_cnt, sc_http_err_rate, sc_http_fail_cnt, sc_http_fail_rate, sc_http_req_cnt, sc_http_req_rate, sc_inc_gpc, sc_inc_gpc0, sc_inc_gpc1, sc0_inc_gpc0, sc0_inc_gpc1, sc1_inc_gpc0, sc1_inc_gpc1, sc2_inc_gpc0, sc2_inc_gpc1, sc_sess_cnt, sc_sess_rate, src, src_bytes_in_rate, src_bytes_out_rate, src_clr_gpc, src_clr_gpc0, src_clr_gpc1, src_conn_cnt, src_conn_cur, src_conn_rate, src_get_gpc, src_get_gpc0, src_get_gpc1, src_get_gpt, src_glitch_cnt, src_glitch_rate, src_gpc_rate, src_gpc0_rate, src_gpc1_rate, src_http_err_cnt, src_http_err_rate, src_http_fail_cnt, src_http_fail_rate, src_http_req_cnt, src_http_req_rate, src_inc_gpc, src_inc_gpc0, src_inc_gpc1, src_is_local, src_kbytes_in, src_kbytes_out, src_port, src_sess_cnt, src_sess_rate, ssl_c_ca_commonname, ssl_c_verify_code, ssl_c_verify, ssl_fc_sni, ssl_fc, ssl_hello_type, ssl_sni_beg, ssl_sni_end, ssl_sni_reg, ssl_sni, ssl_sni_sub, stopping, url_param, var, wait_end, custom_acl.
+- `gpc_number` (String) ACL gpc_number value.
+- `gpt_number` (String) ACL gpt_number value.
+- `hdr` (String) ACL hdr value.
+- `hdr_beg` (String) ACL hdr_beg value.
+- `hdr_end` (String) ACL hdr_end value.
+- `hdr_reg` (String) ACL hdr_reg value.
+- `hdr_sub` (String) ACL hdr_sub value.
+- `http_method` (Set of String) Selected http_method values for this acl. One or more of: CONNECT, DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, TRACE.
+- `mapfile` (String) ACL mapfile (UUID reference).
+- `nbsrv` (String) ACL nbsrv value.
+- `nbsrv_backend` (String) ACL nbsrv_backend (UUID reference).
+- `negate` (Boolean) Enable the negate option for this acl.
+- `path` (String) ACL path value.
+- `path_beg` (String) ACL path_beg value.
+- `path_dir` (String) ACL path_dir value.
+- `path_end` (String) ACL path_end value.
+- `path_reg` (String) ACL path_reg value.
+- `path_sub` (String) ACL path_sub value.
+- `query_backend` (String) ACL query_backend (UUID reference).
+- `sc0_clr_gpc0` (String) ACL sc0_clr_gpc0 value.
+- `sc0_clr_gpc0_comparison` (String) ACL sc0_clr_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc0_clr_gpc1` (String) ACL sc0_clr_gpc1 value.
+- `sc0_clr_gpc1_comparison` (String) ACL sc0_clr_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc0_get_gpc0` (String) ACL sc0_get_gpc0 value.
+- `sc0_get_gpc0_comparison` (String) ACL sc0_get_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc0_get_gpc1` (String) ACL sc0_get_gpc1 value.
+- `sc0_get_gpc1_comparison` (String) ACL sc0_get_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc0_get_gpt0` (String) ACL sc0_get_gpt0 value.
+- `sc0_get_gpt0_comparison` (String) ACL sc0_get_gpt0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc0_gpc0_rate` (String) ACL sc0_gpc0_rate value.
+- `sc0_gpc0_rate_comparison` (String) ACL sc0_gpc0_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc0_gpc1_rate` (String) ACL sc0_gpc1_rate value.
+- `sc0_gpc1_rate_comparison` (String) ACL sc0_gpc1_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc0_inc_gpc0` (String) ACL sc0_inc_gpc0 value.
+- `sc0_inc_gpc0_comparison` (String) ACL sc0_inc_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc0_inc_gpc1` (String) ACL sc0_inc_gpc1 value.
+- `sc0_inc_gpc1_comparison` (String) ACL sc0_inc_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_clr_gpc` (String) ACL sc1_clr_gpc value.
+- `sc1_clr_gpc0` (String) ACL sc1_clr_gpc0 value.
+- `sc1_clr_gpc0_comparison` (String) ACL sc1_clr_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_clr_gpc1` (String) ACL sc1_clr_gpc1 value.
+- `sc1_clr_gpc1_comparison` (String) ACL sc1_clr_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_clr_gpc_comparison` (String) ACL sc1_clr_gpc_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_get_gpc0` (String) ACL sc1_get_gpc0 value.
+- `sc1_get_gpc0_comparison` (String) ACL sc1_get_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_get_gpc1` (String) ACL sc1_get_gpc1 value.
+- `sc1_get_gpc1_comparison` (String) ACL sc1_get_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_get_gpt0` (String) ACL sc1_get_gpt0 value.
+- `sc1_get_gpt0_comparison` (String) ACL sc1_get_gpt0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_gpc0_rate` (String) ACL sc1_gpc0_rate value.
+- `sc1_gpc0_rate_comparison` (String) ACL sc1_gpc0_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_gpc1_rate` (String) ACL sc1_gpc1_rate value.
+- `sc1_gpc1_rate_comparison` (String) ACL sc1_gpc1_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_inc_gpc0` (String) ACL sc1_inc_gpc0 value.
+- `sc1_inc_gpc0_comparison` (String) ACL sc1_inc_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc1_inc_gpc1` (String) ACL sc1_inc_gpc1 value.
+- `sc1_inc_gpc1_comparison` (String) ACL sc1_inc_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_clr_gpc` (String) ACL sc2_clr_gpc value.
+- `sc2_clr_gpc0` (String) ACL sc2_clr_gpc0 value.
+- `sc2_clr_gpc0_comparison` (String) ACL sc2_clr_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_clr_gpc1` (String) ACL sc2_clr_gpc1 value.
+- `sc2_clr_gpc1_comparison` (String) ACL sc2_clr_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_clr_gpc_comparison` (String) ACL sc2_clr_gpc_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_get_gpc0` (String) ACL sc2_get_gpc0 value.
+- `sc2_get_gpc0_comparison` (String) ACL sc2_get_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_get_gpc1` (String) ACL sc2_get_gpc1 value.
+- `sc2_get_gpc1_comparison` (String) ACL sc2_get_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_get_gpt0` (String) ACL sc2_get_gpt0 value.
+- `sc2_get_gpt0_comparison` (String) ACL sc2_get_gpt0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_gpc0_rate` (String) ACL sc2_gpc0_rate value.
+- `sc2_gpc0_rate_comparison` (String) ACL sc2_gpc0_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_gpc1_rate` (String) ACL sc2_gpc1_rate value.
+- `sc2_gpc1_rate_comparison` (String) ACL sc2_gpc1_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_inc_gpc0` (String) ACL sc2_inc_gpc0 value.
+- `sc2_inc_gpc0_comparison` (String) ACL sc2_inc_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc2_inc_gpc1` (String) ACL sc2_inc_gpc1 value.
+- `sc2_inc_gpc1_comparison` (String) ACL sc2_inc_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_bytes_in_rate` (String) ACL sc_bytes_in_rate value.
+- `sc_bytes_in_rate_comparison` (String) ACL sc_bytes_in_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_bytes_out_rate` (String) ACL sc_bytes_out_rate value.
+- `sc_bytes_out_rate_comparison` (String) ACL sc_bytes_out_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_clr_gpc` (String) ACL sc_clr_gpc value.
+- `sc_clr_gpc0` (String) ACL sc_clr_gpc0 value.
+- `sc_clr_gpc0_comparison` (String) ACL sc_clr_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_clr_gpc1` (String) ACL sc_clr_gpc1 value.
+- `sc_clr_gpc1_comparison` (String) ACL sc_clr_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_clr_gpc_comparison` (String) ACL sc_clr_gpc_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_conn_cnt` (String) ACL sc_conn_cnt value.
+- `sc_conn_cnt_comparison` (String) ACL sc_conn_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_conn_cur` (String) ACL sc_conn_cur value.
+- `sc_conn_cur_comparison` (String) ACL sc_conn_cur_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_conn_rate` (String) ACL sc_conn_rate value.
+- `sc_conn_rate_comparison` (String) ACL sc_conn_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_get_gpc` (String) ACL sc_get_gpc value.
+- `sc_get_gpc0` (String) ACL sc_get_gpc0 value.
+- `sc_get_gpc0_comparison` (String) ACL sc_get_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_get_gpc1` (String) ACL sc_get_gpc1 value.
+- `sc_get_gpc1_comparison` (String) ACL sc_get_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_get_gpc_comparison` (String) ACL sc_get_gpc_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_get_gpt` (String) ACL sc_get_gpt value.
+- `sc_get_gpt0` (String) ACL sc_get_gpt0 value.
+- `sc_get_gpt0_comparison` (String) ACL sc_get_gpt0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_get_gpt_comparison` (String) ACL sc_get_gpt_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_glitch_cnt` (String) ACL sc_glitch_cnt value.
+- `sc_glitch_cnt_comparison` (String) ACL sc_glitch_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_glitch_rate` (String) ACL sc_glitch_rate value.
+- `sc_glitch_rate_comparison` (String) ACL sc_glitch_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_gpc0_rate` (String) ACL sc_gpc0_rate value.
+- `sc_gpc0_rate_comparison` (String) ACL sc_gpc0_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_gpc1_rate` (String) ACL sc_gpc1_rate value.
+- `sc_gpc1_rate_comparison` (String) ACL sc_gpc1_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_gpc_rate` (String) ACL sc_gpc_rate value.
+- `sc_gpc_rate_comparison` (String) ACL sc_gpc_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_http_err_cnt` (String) ACL sc_http_err_cnt value.
+- `sc_http_err_cnt_comparison` (String) ACL sc_http_err_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_http_err_rate` (String) ACL sc_http_err_rate value.
+- `sc_http_err_rate_comparison` (String) ACL sc_http_err_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_http_fail_cnt` (String) ACL sc_http_fail_cnt value.
+- `sc_http_fail_cnt_comparison` (String) ACL sc_http_fail_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_http_fail_rate` (String) ACL sc_http_fail_rate value.
+- `sc_http_fail_rate_comparison` (String) ACL sc_http_fail_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_http_req_cnt` (String) ACL sc_http_req_cnt value.
+- `sc_http_req_cnt_comparison` (String) ACL sc_http_req_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_http_req_rate` (String) ACL sc_http_req_rate value.
+- `sc_http_req_rate_comparison` (String) ACL sc_http_req_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_inc_gpc` (String) ACL sc_inc_gpc value.
+- `sc_inc_gpc0` (String) ACL sc_inc_gpc0 value.
+- `sc_inc_gpc0_comparison` (String) ACL sc_inc_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_inc_gpc1` (String) ACL sc_inc_gpc1 value.
+- `sc_inc_gpc1_comparison` (String) ACL sc_inc_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_inc_gpc_comparison` (String) ACL sc_inc_gpc_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_number` (String) ACL sc_number value.
+- `sc_sess_cnt` (String) ACL sc_sess_cnt value.
+- `sc_sess_cnt_comparison` (String) ACL sc_sess_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `sc_sess_rate` (String) ACL sc_sess_rate value.
+- `sc_sess_rate_comparison` (String) ACL sc_sess_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src` (String) ACL src value.
+- `src_bytes_in_rate` (String) ACL src_bytes_in_rate value.
+- `src_bytes_in_rate_comparison` (String) ACL src_bytes_in_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_bytes_out_rate` (String) ACL src_bytes_out_rate value.
+- `src_bytes_out_rate_comparison` (String) ACL src_bytes_out_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_clr_gpc0` (String) ACL src_clr_gpc0 value.
+- `src_clr_gpc0_comparison` (String) ACL src_clr_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_clr_gpc1` (String) ACL src_clr_gpc1 value.
+- `src_clr_gpc1_comparison` (String) ACL src_clr_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_conn_cnt` (String) ACL src_conn_cnt value.
+- `src_conn_cnt_comparison` (String) ACL src_conn_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_conn_cur` (String) ACL src_conn_cur value.
+- `src_conn_cur_comparison` (String) ACL src_conn_cur_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_conn_rate` (String) ACL src_conn_rate value.
+- `src_conn_rate_comparison` (String) ACL src_conn_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_get_gpc` (String) ACL src_get_gpc value.
+- `src_get_gpc0` (String) ACL src_get_gpc0 value.
+- `src_get_gpc0_comparison` (String) ACL src_get_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_get_gpc1` (String) ACL src_get_gpc1 value.
+- `src_get_gpc1_comparison` (String) ACL src_get_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_get_gpc_comparison` (String) ACL src_get_gpc_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_get_gpt` (String) ACL src_get_gpt value.
+- `src_get_gpt_comparison` (String) ACL src_get_gpt_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_glitch_cnt` (String) ACL src_glitch_cnt value.
+- `src_glitch_cnt_comparison` (String) ACL src_glitch_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_glitch_rate` (String) ACL src_glitch_rate value.
+- `src_glitch_rate_comparison` (String) ACL src_glitch_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_gpc0_rate` (String) ACL src_gpc0_rate value.
+- `src_gpc0_rate_comparison` (String) ACL src_gpc0_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_gpc1_rate` (String) ACL src_gpc1_rate value.
+- `src_gpc1_rate_comparison` (String) ACL src_gpc1_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_gpc_rate` (String) ACL src_gpc_rate value.
+- `src_gpc_rate_comparison` (String) ACL src_gpc_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_http_err_cnt` (String) ACL src_http_err_cnt value.
+- `src_http_err_cnt_comparison` (String) ACL src_http_err_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_http_err_rate` (String) ACL src_http_err_rate value.
+- `src_http_err_rate_comparison` (String) ACL src_http_err_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_http_fail_cnt` (String) ACL src_http_fail_cnt value.
+- `src_http_fail_cnt_comparison` (String) ACL src_http_fail_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_http_fail_rate` (String) ACL src_http_fail_rate value.
+- `src_http_fail_rate_comparison` (String) ACL src_http_fail_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_http_req_cnt` (String) ACL src_http_req_cnt value.
+- `src_http_req_cnt_comparison` (String) ACL src_http_req_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_http_req_rate` (String) ACL src_http_req_rate value.
+- `src_http_req_rate_comparison` (String) ACL src_http_req_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_inc_gpc` (String) ACL src_inc_gpc value.
+- `src_inc_gpc0` (String) ACL src_inc_gpc0 value.
+- `src_inc_gpc0_comparison` (String) ACL src_inc_gpc0_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_inc_gpc1` (String) ACL src_inc_gpc1 value.
+- `src_inc_gpc1_comparison` (String) ACL src_inc_gpc1_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_inc_gpc_comparison` (String) ACL src_inc_gpc_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_kbytes_in` (String) ACL src_kbytes_in value.
+- `src_kbytes_in_comparison` (String) ACL src_kbytes_in_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_kbytes_out` (String) ACL src_kbytes_out value.
+- `src_kbytes_out_comparison` (String) ACL src_kbytes_out_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_port` (String) ACL src_port value.
+- `src_port_comparison` (String) ACL src_port_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_sess_cnt` (String) ACL src_sess_cnt value.
+- `src_sess_cnt_comparison` (String) ACL src_sess_cnt_comparison option. One of: , gt, ge, eq, lt, le.
+- `src_sess_rate` (String) ACL src_sess_rate value.
+- `src_sess_rate_comparison` (String) ACL src_sess_rate_comparison option. One of: , gt, ge, eq, lt, le.
+- `ssl_c_ca_commonname` (String) ACL ssl_c_ca_commonname value.
+- `ssl_c_verify_code` (String) ACL ssl_c_verify_code value.
+- `ssl_fc_sni` (String) ACL ssl_fc_sni value.
+- `ssl_hello_type` (String) ACL ssl_hello_type option. One of: , x0, x1, x2.
+- `ssl_sni` (String) ACL ssl_sni value.
+- `ssl_sni_beg` (String) ACL ssl_sni_beg value.
+- `ssl_sni_end` (String) ACL ssl_sni_end value.
+- `ssl_sni_reg` (String) ACL ssl_sni_reg value.
+- `ssl_sni_sub` (String) ACL ssl_sni_sub value.
+- `table_name` (String) ACL table_name value.
+- `url_param` (String) ACL url_param value.
+- `url_param_value` (String) ACL url_param_value value.
+- `urlparam` (String) ACL urlparam value.
+- `value` (String) ACL value value.
+- `var` (String) ACL var value.
+- `var_comparison` (String) ACL var_comparison option. One of: , gt, ge, eq, lt, le.
+- `var_value` (String) ACL var_value value.
 
 ### Read-Only
 
-- `id` (String) UUID assigned by OPNsense.
+- `id` (String) UUID of the haproxy acl.
+- `internal_id` (String) Internal OPNsense id assigned to this haproxy acl.
 
 ## Import
 

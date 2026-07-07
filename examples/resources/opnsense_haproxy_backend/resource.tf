@@ -12,36 +12,26 @@ resource "opnsense_haproxy_server" "app" {
 }
 
 resource "opnsense_haproxy_backend" "app" {
-  config = {
-    enabled                   = "0"
-    name                      = "example_app_backend"
-    description               = "Example HAProxy backend pool"
-    mode                      = "http"
-    algorithm                 = "source"
-    random_draws              = "2"
-    proxyProtocol             = ""
-    linkedServers             = opnsense_haproxy_server.app.id
-    linkedFcgi                = ""
-    linkedResolver            = ""
-    resolverOpts              = ""
-    resolvePrefer             = ""
-    source                    = ""
-    healthCheckEnabled        = "0"
-    healthCheck               = ""
-    healthCheckLogStatus      = "0"
-    healthCheckProxyProto     = "backend"
-    http2Enabled              = "1"
-    http2Enabled_nontls       = "0"
-    ba_advertised_protocols   = "h2,http11"
-    forwardFor                = "0"
-    forwardedHeader           = "0"
-    forwardedHeaderParameters = ""
-    persistence               = ""
-    customOptions             = ""
-    tuning_noport             = "0"
-    tuning_httpreuse          = "safe"
-    tuning_caching            = "0"
-    linkedActions             = ""
-    linkedErrorfiles          = ""
-  }
+  enabled                  = false
+  name                     = "example_app_backend"
+  description              = "Example HAProxy backend pool"
+  mode                     = "http"
+  algorithm                = "source"
+  random_draws             = "2"
+  linked_servers           = [opnsense_haproxy_server.app.id]
+  health_check_enabled     = false
+  health_check_proxy_proto = "backend"
+  http2_enabled            = true
+  http2_enabled_nontls     = false
+  ba_advertised_protocols  = ["h2", "http11"]
+  persistence              = "sticktable"
+  persistence_cookiemode   = "piggyback"
+  persistence_cookiename   = "SRVCOOKIE"
+  persistence_stripquotes  = true
+  stickiness_pattern       = "sourceipv4"
+  stickiness_expire        = "30m"
+  stickiness_size          = "50k"
+  tuning_noport            = false
+  tuning_httpreuse         = "safe"
+  tuning_caching           = false
 }

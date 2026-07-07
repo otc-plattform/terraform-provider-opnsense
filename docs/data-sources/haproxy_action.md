@@ -3,12 +3,12 @@
 page_title: "opnsense_haproxy_action Data Source - terraform-provider-opnsense"
 subcategory: ""
 description: |-
-  Read an OPNsense HAProxy rule/action using the raw HAProxy API payload.
+  Read an OPNsense HAProxy rule/action.
 ---
 
 # opnsense_haproxy_action (Data Source)
 
-Read an OPNsense HAProxy rule/action using the raw HAProxy API payload.
+Read an OPNsense HAProxy rule/action.
 
 
 
@@ -17,8 +17,87 @@ Read an OPNsense HAProxy rule/action using the raw HAProxy API payload.
 
 ### Required
 
-- `id` (String) UUID assigned by OPNsense.
+- `id` (String) UUID of the haproxy action.
 
 ### Read-Only
 
-- `config` (Map of String) Raw HAProxy settings payload as string values. Keys match OPNsense API field names.
+- `compression_algo_req` (Set of String) Selected compression_algo_req values for this action. One or more of: , gzip, deflate, raw-deflate.
+- `compression_algo_res` (Set of String) Selected compression_algo_res values for this action. One or more of: , gzip, deflate, raw-deflate.
+- `compression_direction` (String) Action compression_direction option. One of: , response, request, both.
+- `compression_mime_req` (Set of String) Selected compression_mime_req values for this action. One or more of: .
+- `compression_mime_res` (Set of String) Selected compression_mime_res values for this action. One or more of: .
+- `compression_minsize_req` (String) Action compression_minsize_req value.
+- `compression_minsize_res` (String) Action compression_minsize_res value.
+- `compression_offloading` (Boolean) Enable the compression_offloading option for this action.
+- `custom` (String) Action custom value.
+- `description` (String) Action description value.
+- `enabled` (Boolean) Enable the enabled option for this action.
+- `fcgi_pass_header` (String) Action fcgi_pass_header value.
+- `fcgi_set_param` (String) Action fcgi_set_param value.
+- `gpc_number` (String) Action gpc_number value.
+- `gpt_number` (String) Action gpt_number value.
+- `http_after_response_action` (String) Action http_after_response_action option. One of: , add-header, allow, capture, del-header, del-map, do-log, replace-header, replace-value, sc-add-gpc, sc-inc-gpc, sc-inc-gpc0, sc-inc-gpc1, sc-set-gpt, sc-set-gpt0, set-header, set-log-level, set-map, set-status, set-var, set-var-fmt, strict-mode, unset-var.
+- `http_after_response_option` (String) Action http_after_response_option value.
+- `http_request_action` (String) Action http_request_action option. One of: , add-acl, add-header, allow, auth, cache-use, capture, del-acl, del-header, del-map, deny, disable-l7-retry, do-log, do-resolve, early-hint, lua, normalize-uri, redirect, reject, replace-header, replace-path, replace-pathq, replace-uri, replace-value, return, sc-add-gpc, sc-inc-gpc, sc-inc-gpc0, sc-inc-gpc1, sc-set-gpt, sc-set-gpt0, send-spoe-group, set-dst, set-dst-port, set-fc-mark, set-fc-tos, set-header, set-log-level, set-map, set-method, set-nice, set-path, set-pathq, set-priority-class, set-priority-offset, set-query, set-src, set-src-port, set-timeout, set-uri, set-var, set-var-fmt, silent-drop, strict-mode, tarpit, track-sc0, track-sc1, track-sc2, unset-var, use-service, wait-for-body, wait-for-handshake.
+- `http_request_add_header_content` (String) Action http_request_add_header_content value.
+- `http_request_add_header_name` (String) Action http_request_add_header_name value.
+- `http_request_auth` (String) Action http_request_auth value.
+- `http_request_del_header_name` (String) Action http_request_del_header_name value.
+- `http_request_deny_status` (String) Action http_request_deny_status value.
+- `http_request_lua` (String) Action http_request_lua value.
+- `http_request_option` (String) Action http_request_option value.
+- `http_request_redirect` (String) Action http_request_redirect value.
+- `http_request_replace_header_name` (String) Action http_request_replace_header_name value.
+- `http_request_replace_header_regex` (String) Action http_request_replace_header_regex value.
+- `http_request_replace_value_name` (String) Action http_request_replace_value_name value.
+- `http_request_replace_value_regex` (String) Action http_request_replace_value_regex value.
+- `http_request_set_header_content` (String) Action http_request_set_header_content value.
+- `http_request_set_header_name` (String) Action http_request_set_header_name value.
+- `http_request_set_path` (String) Action http_request_set_path value.
+- `http_request_set_var_expr` (String) Action http_request_set_var_expr value.
+- `http_request_set_var_name` (String) Action http_request_set_var_name value.
+- `http_request_set_var_scope` (String) Action http_request_set_var_scope option. One of: , proc, sess, txn, req, res.
+- `http_request_use_service` (String) Action http_request_use_service value.
+- `http_response_action` (String) Action http_response_action option. One of: , add-acl, add-header, allow, cache-store, capture, del-acl, del-header, del-map, deny, do-log, lua, redirect, replace-header, replace-value, return, sc-add-gpc, sc-inc-gpc, sc-inc-gpc0, sc-inc-gpc1, sc-set-gpt, sc-set-gpt0, send-spoe-group, set-fc-mark, set-fc-tos, set-header, set-log-level, set-map, set-nice, set-status, set-timeout, set-var, set-var-fmt, silent-drop, strict-mode, track-sc0, track-sc1, track-sc2, unset-var, wait-for-body.
+- `http_response_add_header_content` (String) Action http_response_add_header_content value.
+- `http_response_add_header_name` (String) Action http_response_add_header_name value.
+- `http_response_del_header_name` (String) Action http_response_del_header_name value.
+- `http_response_lua` (String) Action http_response_lua value.
+- `http_response_option` (String) Action http_response_option value.
+- `http_response_replace_header_name` (String) Action http_response_replace_header_name value.
+- `http_response_replace_header_regex` (String) Action http_response_replace_header_regex value.
+- `http_response_replace_value_name` (String) Action http_response_replace_value_name value.
+- `http_response_replace_value_regex` (String) Action http_response_replace_value_regex value.
+- `http_response_set_header_content` (String) Action http_response_set_header_content value.
+- `http_response_set_header_name` (String) Action http_response_set_header_name value.
+- `http_response_set_status_code` (String) Action http_response_set_status_code value.
+- `http_response_set_status_reason` (String) Action http_response_set_status_reason value.
+- `http_response_set_var_expr` (String) Action http_response_set_var_expr value.
+- `http_response_set_var_name` (String) Action http_response_set_var_name value.
+- `http_response_set_var_scope` (String) Action http_response_set_var_scope option. One of: , proc, sess, txn, req, res.
+- `linked_acls` (Set of String) List of linked_acls values for this action.
+- `map_data_use_backend_default` (String) Action map_data_use_backend_default (UUID reference).
+- `map_data_use_backend_file` (String) Action map_data_use_backend_file (UUID reference).
+- `map_data_use_backend_input` (String) Action map_data_use_backend_input value.
+- `map_default` (String) Action map_default value.
+- `map_use_backend_default` (String) Action map_use_backend_default (UUID reference).
+- `map_use_backend_file` (String) Action map_use_backend_file (UUID reference).
+- `mapfile` (String) Action mapfile (UUID reference).
+- `monitor_fail_uri` (String) Action monitor_fail_uri value.
+- `name` (String) Action name value.
+- `operator` (String) Action operator option. One of: , and, or.
+- `sample_fetch` (String) Action sample_fetch value.
+- `sc_number` (String) Action sc_number value.
+- `tcp_request_action` (String) Action tcp_request_action option. One of: , connection_accept, connection_expect-netscaler-cip, connection_expect-proxy, connection_fc-silent-drop, connection_reject, connection_sc-add-gpc, connection_sc-inc-gpc, connection_sc-inc-gpc0, connection_sc-inc-gpc1, connection_sc-set-gpt, connection_sc-set-gpt0, connection_send-spoe-group, connection_set-dst, connection_set-dst-port, connection_set-fc-mark, connection_set-fc-tos, connection_set-log-level, connection_set-src, connection_set-src-port, connection_set-var, connection_set-var-fmt, connection_silent-drop, connection_track-sc0, connection_track-sc1, connection_track-sc2, connection_unset-var, content_accept, content_capture, content_do-resolve, content_lua, content_reject, content_sc-add-gpc, content_sc-inc-gpc, content_sc-inc-gpc0, content_sc-inc-gpc1, content_sc-set-gpt, content_sc-set-gpt0, content_send-spoe-group, content_set-dst, content_set-dst-port, content_set-fc-mark, content_set-fc-tos, content_set-log-level, content_set-nice, content_set-priority-class, content_set-priority-offset, content_set-src, content_set-src-port, content_set-var, content_set-var-fmt, content_silent-drop, content_switch-mode, content_track-sc0, content_track-sc1, content_track-sc2, content_unset-var, content_use-service, inspect-delay, session_accept, session_attach-srv, session_reject, session_sc-add-gpc, session_sc-inc-gpc, session_sc-inc-gpc0, session_sc-inc-gpc1, session_sc-set-gpt, session_sc-set-gpt0, session_send-spoe-group, session_set-dst, session_set-dst-port, session_set-fc-mark, session_set-fc-tos, session_set-log-level, session_set-src, session_set-src-port, session_set-var, session_set-var-fmt, session_silent-drop, session_track-sc0, session_track-sc1, session_track-sc2, session_unset-var.
+- `tcp_request_content_lua` (String) Action tcp_request_content_lua value.
+- `tcp_request_content_use_service` (String) Action tcp_request_content_use_service value.
+- `tcp_request_inspect_delay` (String) Action tcp_request_inspect_delay value.
+- `tcp_request_option` (String) Action tcp_request_option value.
+- `tcp_response_action` (String) Action tcp_response_action option. One of: , content_accept, content_close, content_lua, content_reject, content_sc-add-gpc, content_sc-inc-gpc, content_sc-inc-gpc0, content_sc-inc-gpc1, content_sc-set-gpt, content_sc-set-gpt0, content_send-spoe-group, content_set-fc-mark, content_set-fc-tos, content_set-log-level, content_set-nice, content_set-var, content_set-var-fmt, content_silent-drop, content_unset-var, inspect-delay.
+- `tcp_response_content_lua` (String) Action tcp_response_content_lua value.
+- `tcp_response_inspect_delay` (String) Action tcp_response_inspect_delay value.
+- `tcp_response_option` (String) Action tcp_response_option value.
+- `test_type` (String) Action test_type option. One of: if, unless.
+- `type` (String) Action type option. One of: compression, fcgi_pass_header, fcgi_set_param, http-after-response, http-request, http-response, map_data_use_backend, map_use_backend, monitor_fail, tcp-request, tcp-response, use_backend, use_server, custom.
+- `use_backend` (String) Action use_backend (UUID reference).
+- `use_server` (String) Action use_server (UUID reference).

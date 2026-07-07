@@ -11,48 +11,40 @@ resource "opnsense_haproxy_server" "app" {
 }
 
 resource "opnsense_haproxy_backend" "app" {
-  config = {
-    enabled                 = "0"
-    name                    = "example_frontend_backend"
-    mode                    = "http"
-    algorithm               = "source"
-    random_draws            = "2"
-    linkedServers           = opnsense_haproxy_server.app.id
-    healthCheckEnabled      = "0"
-    healthCheckProxyProto   = "backend"
-    http2Enabled            = "1"
-    ba_advertised_protocols = "h2,http11"
-    persistence             = ""
-    tuning_httpreuse        = "safe"
-  }
+  enabled                  = false
+  name                     = "example_frontend_backend"
+  mode                     = "http"
+  algorithm                = "source"
+  random_draws             = "2"
+  linked_servers           = [opnsense_haproxy_server.app.id]
+  health_check_enabled     = false
+  health_check_proxy_proto = "backend"
+  http2_enabled            = true
+  ba_advertised_protocols  = ["h2", "http11"]
+  persistence              = "sticktable"
+  tuning_httpreuse         = "safe"
 }
 
 resource "opnsense_haproxy_frontend" "app" {
-  config = {
-    enabled                   = "0"
-    name                      = "example_public_service"
-    description               = "Example HAProxy public service"
-    bind                      = "0.0.0.0:8080"
-    bindOptions               = ""
-    mode                      = "http"
-    defaultBackend            = opnsense_haproxy_backend.app.id
-    ssl_enabled               = "0"
-    ssl_advancedEnabled       = "0"
-    basicAuthEnabled          = "0"
-    logging_dontLogNull       = "0"
-    logging_dontLogNormal     = "0"
-    logging_logSeparateErrors = "0"
-    logging_detailedLog       = "0"
-    logging_socketStats       = "0"
-    http2Enabled              = "1"
-    http2Enabled_nontls       = "0"
-    advertised_protocols      = "h2,http11"
-    forwardFor                = "0"
-    prometheus_enabled        = "0"
-    prometheus_path           = "/metrics"
-    connectionBehaviour       = "http-keep-alive"
-    customOptions             = ""
-    linkedActions             = ""
-    linkedErrorfiles          = ""
-  }
+  enabled                     = false
+  name                        = "example_public_service"
+  description                 = "Example HAProxy public service"
+  bind                        = ["0.0.0.0:8080"]
+  mode                        = "http"
+  default_backend             = opnsense_haproxy_backend.app.id
+  ssl_enabled                 = false
+  ssl_advanced_enabled        = false
+  basic_auth_enabled          = false
+  logging_dont_log_null       = false
+  logging_dont_log_normal     = false
+  logging_log_separate_errors = false
+  logging_detailed_log        = false
+  logging_socket_stats        = false
+  http2_enabled               = true
+  http2_enabled_nontls        = false
+  advertised_protocols        = ["h2", "http11"]
+  forward_for                 = "0"
+  prometheus_enabled          = false
+  prometheus_path             = "/metrics"
+  connection_behaviour        = "http-keep-alive"
 }
