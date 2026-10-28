@@ -15,6 +15,7 @@ func Resources(ctx context.Context) []func() resource.Resource {
 		newHAProxyFrontendResource,
 		newHAProxyACLResource,
 		newHAProxyActionResource,
+		newHAProxyResolverResource,
 	}
 }
 
@@ -26,5 +27,6 @@ func DataSources(ctx context.Context) []func() datasource.DataSource {
 		newHAProxyFrontendDataSource,
 		newHAProxyACLDataSource,
 		newHAProxyActionDataSource,
+		newHAProxyResolverDataSource,
 	}
 }
