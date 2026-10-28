@@ -36,6 +36,7 @@ resource "opnsense_acmeclient_account" "example" {
 - `eab_hmac` (String, Sensitive) External Account Binding HMAC key, if required by the CA.
 - `eab_kid` (String) External Account Binding key identifier, if required by the CA.
 - `enabled` (Boolean) Whether the ACME account is enabled.
+- `register` (Boolean) Register with the configured ACME CA on creation or update when unregistered. Defaults to `true` and contacts the external CA. Set to `false` to skip registration. Registration failures include the account UUID; consult the OPNsense ACME client logs.
 
 ### Read-Only
 

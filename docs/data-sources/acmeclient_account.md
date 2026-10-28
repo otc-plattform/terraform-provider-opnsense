@@ -30,5 +30,6 @@ Read ACME client account details from OPNsense.
 - `enabled` (Boolean) Whether the ACME account is enabled.
 - `key` (String, Sensitive) Raw ACME account key material.
 - `name` (String) Display name of the ACME account.
+- `register` (Boolean) Resource-only configuration; its value cannot be read from OPNsense.
 - `status_code` (String) Latest ACME account status code reported by OPNsense.
 - `status_last_update` (String) Timestamp of the most recent ACME account status update.

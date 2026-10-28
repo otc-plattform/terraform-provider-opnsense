@@ -14,6 +14,7 @@ import (
 type acmeclientAccountResourceModel struct {
 	Id               types.String `tfsdk:"id"`
 	Enabled          types.Bool   `tfsdk:"enabled"`
+	Register         types.Bool   `tfsdk:"register"`
 	Name             types.String `tfsdk:"name"`
 	Description      types.String `tfsdk:"description"`
 	Email            types.String `tfsdk:"email"`
@@ -39,6 +40,12 @@ func acmeclientAccountResourceSchema() schema.Schema {
 			},
 			"enabled": schema.BoolAttribute{
 				MarkdownDescription: "Whether the ACME account is enabled.",
+				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(true),
+			},
+			"register": schema.BoolAttribute{
+				MarkdownDescription: "Register the account with its configured ACME CA when created or updated. This contacts the external CA. Set to false to manage the account without registering it.",
 				Optional:            true,
 				Computed:            true,
 				Default:             booldefault.StaticBool(true),
@@ -105,6 +112,10 @@ func acmeclientAccountDataSourceSchema() dschema.Schema {
 			},
 			"enabled": dschema.BoolAttribute{
 				MarkdownDescription: "Whether the ACME account is enabled.",
+				Computed:            true,
+			},
+			"register": dschema.BoolAttribute{
+				MarkdownDescription: "Registration is a resource configuration option and cannot be read from OPNsense.",
 				Computed:            true,
 			},
 			"name": dschema.StringAttribute{

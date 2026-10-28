@@ -95,6 +95,25 @@ func (r *acmeclientAccountResource) Create(ctx context.Context, req resource.Cre
 		accountModel.EABHMAC = data.EABHMAC
 	}
 
+	accountModel.Register = data.Register
+	// Preserve the created account in state before making the external CA call.
+	resp.Diagnostics.Append(resp.State.Set(ctx, &accountModel)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	if data.Register.ValueBool() {
+		registered, registerErr := registerAccount(ctx, r.client.Acmeclient(), data.Id.ValueString())
+		if registerErr != nil {
+			resp.Diagnostics.AddError("Account Registration Error", registerErr.Error())
+			return
+		}
+		registered.Register = data.Register
+		if registered.EABHMAC.IsNull() || registered.EABHMAC.ValueString() == "" {
+			registered.EABHMAC = data.EABHMAC
+		}
+		accountModel = registered
+	}
+
 	tflog.Trace(ctx, "created acmeclient account", map[string]any{
 		"id": accountModel.Id.ValueString(),
 	})
@@ -127,6 +146,7 @@ func (r *acmeclientAccountResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	accountModel.Id = data.Id
+	accountModel.Register = data.Register
 
 	if accountModel.EABHMAC.IsNull() || accountModel.EABHMAC.ValueString() == "" {
 		accountModel.EABHMAC = data.EABHMAC
@@ -165,9 +185,26 @@ func (r *acmeclientAccountResource) Update(ctx context.Context, req resource.Upd
 	}
 
 	accountModel.Id = data.Id
+	accountModel.Register = data.Register
 
 	if accountModel.EABHMAC.IsNull() || accountModel.EABHMAC.ValueString() == "" {
 		accountModel.EABHMAC = data.EABHMAC
+	}
+	resp.Diagnostics.Append(resp.State.Set(ctx, &accountModel)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	if data.Register.ValueBool() && accountModel.StatusCode.ValueString() != "200" {
+		registered, registerErr := registerAccount(ctx, r.client.Acmeclient(), data.Id.ValueString())
+		if registerErr != nil {
+			resp.Diagnostics.AddError("Account Registration Error", registerErr.Error())
+			return
+		}
+		registered.Register = data.Register
+		if registered.EABHMAC.IsNull() || registered.EABHMAC.ValueString() == "" {
+			registered.EABHMAC = data.EABHMAC
+		}
+		accountModel = registered
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &accountModel)...)

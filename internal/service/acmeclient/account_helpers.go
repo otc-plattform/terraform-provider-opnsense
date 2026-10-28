@@ -85,6 +85,24 @@ func fetchAccountModel(ctx context.Context, controller *acmeclient.Controller, i
 	return acmeclientAccountResourceModel{}, errs.NewNotFoundError()
 }
 
+func registerAccount(ctx context.Context, controller *acmeclient.Controller, id string) (acmeclientAccountResourceModel, error) {
+	result, err := controller.ACMEClientRegisterAccount(ctx, id)
+	if err != nil {
+		return acmeclientAccountResourceModel{}, fmt.Errorf("register account %s: %w", id, err)
+	}
+	if result == nil || result.Result == "failed" {
+		return acmeclientAccountResourceModel{}, fmt.Errorf("register account %s: OPNsense rejected the request", id)
+	}
+	model, err := fetchAccountModel(ctx, controller, id)
+	if err != nil {
+		return acmeclientAccountResourceModel{}, fmt.Errorf("read account %s after registration: %w", id, err)
+	}
+	if model.StatusCode.ValueString() != "200" {
+		return model, fmt.Errorf("registration of account %s did not succeed (OPNsense status code %q); check the ACME client logs", id, model.StatusCode.ValueString())
+	}
+	return model, nil
+}
+
 func isAccountArrayDecodeError(err error) bool {
 	if err == nil {
 		return false
