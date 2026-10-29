@@ -26,7 +26,7 @@ func locationResponseToModel(id string, resp *nginx.LocationGetResponse) nginxLo
 		SecRulesErrorPage:       stringValueFromOptionMap(location.SecRulesErrorPage),
 		XSSBlockScore:           tools.StringToInt64Null(location.XSSBlockScore),
 		SQLiBlockScore:          tools.StringToInt64Null(location.SQLiBlockScore),
-		CustomPolicy:            stringSliceToSet(location.CustomPolicy),
+		CustomPolicy:            stringSliceToSet([]string(location.CustomPolicy)),
 		CachePath:               stringValueFromOptionMap(location.CachePath),
 		CacheUseStale:           stringValueFromOptionMap(location.CacheUseStale),
 		CacheMethods:            stringValueFromOptionMap(location.CacheMethods),
@@ -36,8 +36,8 @@ func locationResponseToModel(id string, resp *nginx.LocationGetResponse) nginxLo
 		CacheLock:               types.BoolValue(tools.StringToBool(location.CacheLock)),
 		CacheRevalidate:         types.BoolValue(tools.StringToBool(location.CacheRevalidate)),
 		Root:                    tools.StringOrNull(location.Root),
-		Rewrites:                stringSliceToSet(location.Rewrites),
-		Index:                   stringSliceToSet(location.Index),
+		Rewrites:                stringSliceToSet([]string(location.Rewrites)),
+		Index:                   stringSliceToSet([]string(location.Index)),
 		AutoIndex:               types.BoolValue(tools.StringToBool(location.AutoIndex)),
 		AuthBasic:               types.BoolValue(tools.StringToBool(location.AuthBasic)),
 		AuthBasicUserFile:       stringValueFromOptionMap(location.AuthBasicUserFile),
@@ -45,7 +45,7 @@ func locationResponseToModel(id string, resp *nginx.LocationGetResponse) nginxLo
 		ForceHTTPS:              types.BoolValue(tools.StringToBool(location.ForceHTTPS)),
 		PHPEnable:               types.BoolValue(tools.StringToBool(location.PHPEnable)),
 		PHPOverrideScriptName:   tools.StringOrNull(location.PHPOverrideScriptName),
-		LimitRequestConnections: stringSliceToSet(location.LimitRequestConnections),
+		LimitRequestConnections: stringSliceToSet([]string(location.LimitRequestConnections)),
 		MaxBodySize:             tools.StringOrNull(location.MaxBodySize),
 		BodyBufferSize:          tools.StringOrNull(location.BodyBufferSize),
 		Honeypot:                types.BoolValue(tools.StringToBool(location.Honeypot)),
@@ -64,7 +64,7 @@ func locationResponseToModel(id string, resp *nginx.LocationGetResponse) nginxLo
 		Satisfy:                 stringValueFromOptionMap(location.Satisfy),
 		ProxyMaxTempFileSize:    tools.StringOrNull(location.ProxyMaxTempFileSize),
 		ProxySSLServerName:      types.BoolValue(tools.StringToBool(location.ProxySSLServerName)),
-		ErrorPages:              stringSliceToSet(location.ErrorPages),
+		ErrorPages:              stringSliceToSet([]string(location.ErrorPages)),
 	}
 }
 

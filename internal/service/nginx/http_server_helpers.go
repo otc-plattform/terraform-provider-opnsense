@@ -16,17 +16,17 @@ func httpServerResponseToModel(id string, resp *nginx.HTTPServerGetResponse) ngi
 	return nginxHTTPServerResourceModel{
 		Id:                             types.StringValue(id),
 		ServerName:                     stringValueFromOptionMap(server.ServerName),
-		ListenHTTPAddress:              types.StringValue(strings.Join(selectedOptionKeys(server.ListenHTTPAddress), ",")), // TODO: change to set
-		ListenHTTPSAddress:             types.StringValue(strings.Join(selectedOptionKeys(server.ListenHTTPSAddress), ",")),
+		ListenHTTPAddress:              tools.StringOrNull(strings.Join(selectedOptionKeys(server.ListenHTTPAddress), ",")), // TODO: change to set
+		ListenHTTPSAddress:             tools.StringOrNull(strings.Join(selectedOptionKeys(server.ListenHTTPSAddress), ",")),
 		DefaultServer:                  types.BoolValue(tools.StringToBool(server.DefaultServer)),
 		TLSRejectHandshake:             types.BoolValue(tools.StringToBool(server.TLSRejectHandshake)),
-		SyslogTargets:                  stringSliceToSet(server.SyslogTargets),
+		SyslogTargets:                  stringSliceToSet([]string(server.SyslogTargets)),
 		ProxyProtocol:                  types.BoolValue(tools.StringToBool(server.ProxyProtocol)),
-		TrustedProxies:                 stringSliceToSet(server.TrustedProxies),
+		TrustedProxies:                 stringSliceToSet([]string(server.TrustedProxies)),
 		TrustedProxiesAlias:            stringValueFromOptionMap(server.TrustedProxiesAlias),
 		RealIPSource:                   stringValueFromOptionMap(server.RealIPSource),
 		Locations:                      optionMapToSet(server.Locations),
-		Rewrites:                       stringSliceToSet(server.Rewrites),
+		Rewrites:                       stringSliceToSet([]string(server.Rewrites)),
 		Root:                           tools.StringOrNull(server.Root),
 		MaxBodySize:                    tools.StringOrNull(server.MaxBodySize),
 		BodyBufferSize:                 tools.StringOrNull(server.BodyBufferSize),
@@ -53,15 +53,15 @@ func httpServerResponseToModel(id string, resp *nginx.HTTPServerGetResponse) ngi
 		IPACL:                          stringValueFromOptionMap(server.IPACL),
 		AdvancedACLServer:              stringValueFromOptionMap(server.AdvancedACLServer),
 		Satisfy:                        stringValueFromOptionMap(server.Satisfy),
-		NaxsiWhitelistSrcIP:            stringSliceToSet(server.NaxsiWhitelistSrcIP),
+		NaxsiWhitelistSrcIP:            stringSliceToSet([]string(server.NaxsiWhitelistSrcIP)),
 		NaxsiExtensiveLog:              types.BoolValue(tools.StringToBool(server.NaxsiExtensiveLog)),
 		Sendfile:                       types.BoolValue(tools.StringToBool(server.Sendfile)),
 		ClientHeaderBufferSize:         tools.StringOrNull(server.ClientHeaderBufferSize),
 		LargeClientHeaderBuffersNumber: tools.StringOrNull(server.LargeClientHeaderBuffersNumber),
 		LargeClientHeaderBuffersSize:   tools.StringOrNull(server.LargeClientHeaderBuffersSize),
 		SecurityHeader:                 stringValueFromOptionMap(server.SecurityHeader),
-		LimitRequestConnections:        stringSliceToSet(server.LimitRequestConnections),
-		ErrorPages:                     stringSliceToSet(server.ErrorPages),
+		LimitRequestConnections:        stringSliceToSet([]string(server.LimitRequestConnections)),
+		ErrorPages:                     stringSliceToSet([]string(server.ErrorPages)),
 	}
 }
 

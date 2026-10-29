@@ -58,7 +58,7 @@ func (r *nginxSettingsResource) Create(ctx context.Context, req resource.CreateR
 	}
 
 	settingsReq := data.toSettingsSetRequest()
-	res, err := r.client.Nginx().NginxSetSettings(ctx, settingsReq)
+	res, err := r.client.Nginx().NginxSetSettings(ctx, &settingsReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create nginx settings, got error: %s", err))
 		return
@@ -101,7 +101,7 @@ func (r *nginxSettingsResource) Update(ctx context.Context, req resource.UpdateR
 	}
 
 	settingsReq := data.toSettingsSetRequest()
-	res, err := r.client.Nginx().NginxSetSettings(ctx, settingsReq)
+	res, err := r.client.Nginx().NginxSetSettings(ctx, &settingsReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update nginx settings, got error: %s", err))
 		return
@@ -134,7 +134,7 @@ func (r *nginxSettingsResource) Delete(ctx context.Context, req resource.DeleteR
 	settingsReq := resourceModel.toSettingsSetRequest()
 	settingsReq.General.Enabled = boolToAPIString(types.BoolValue(false))
 
-	res, err := r.client.Nginx().NginxSetSettings(ctx, settingsReq)
+	res, err := r.client.Nginx().NginxSetSettings(ctx, &settingsReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to disable nginx settings, got error: %s", err))
 		return

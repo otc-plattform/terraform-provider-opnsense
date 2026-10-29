@@ -60,7 +60,7 @@ func (r *nginxUpstreamResource) Create(ctx context.Context, req resource.CreateR
 
 	upstream := data.toUpstream()
 
-	result, err := r.client.Nginx().NginxAddUpstream(ctx, upstream)
+	result, err := r.client.Nginx().NginxAddUpstream(ctx, &upstream)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create nginx upstream, got error: %s", err))
 		return
@@ -136,7 +136,7 @@ func (r *nginxUpstreamResource) Update(ctx context.Context, req resource.UpdateR
 
 	upstream := data.toUpstream()
 
-	result, err := r.client.Nginx().NginxEditUpstream(ctx, data.Id.ValueString(), upstream)
+	result, err := r.client.Nginx().NginxEditUpstream(ctx, data.Id.ValueString(), &upstream)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update nginx upstream, got error: %s", err))
 		return
