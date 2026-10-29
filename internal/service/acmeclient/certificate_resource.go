@@ -68,7 +68,7 @@ func (r *acmeclientCertificateResource) Create(ctx context.Context, req resource
 		return
 	}
 
-	result, err := r.client.Acmeclient().ACMEClientAddCert(ctx, certificate)
+	result, err := r.client.Acmeclient().ACMEClientAddCert(ctx, &certificate)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to create acmeclient certificate, got error: %s", err))
@@ -180,7 +180,7 @@ func (r *acmeclientCertificateResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	result, err := r.client.Acmeclient().ACMEClientEditCert(ctx, data.Id.ValueString(), certificate)
+	result, err := r.client.Acmeclient().ACMEClientEditCert(ctx, data.Id.ValueString(), &certificate)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to update acmeclient certificate, got error: %s", err))

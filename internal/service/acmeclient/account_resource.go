@@ -62,7 +62,7 @@ func (r *acmeclientAccountResource) Create(ctx context.Context, req resource.Cre
 	}
 
 	request := data.toAccountCreateRequest()
-	result, err := r.client.Acmeclient().ACMEClientAddAccount(ctx, request)
+	result, err := r.client.Acmeclient().ACMEClientAddAccount(ctx, &request)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to create acmeclient account, got error: %s", err))
@@ -164,7 +164,7 @@ func (r *acmeclientAccountResource) Update(ctx context.Context, req resource.Upd
 	}
 
 	request := data.toAccountEditRequest()
-	result, err := r.client.Acmeclient().ACMEClientEditAccount(ctx, data.Id.ValueString(), request)
+	result, err := r.client.Acmeclient().ACMEClientEditAccount(ctx, data.Id.ValueString(), &request)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to update acmeclient account, got error: %s", err))

@@ -60,7 +60,7 @@ func (r *nginxLocationResource) Create(ctx context.Context, req resource.CreateR
 
 	location := data.toLocation()
 
-	result, err := r.client.Nginx().NginxAddLocation(ctx, location)
+	result, err := r.client.Nginx().NginxAddLocation(ctx, &location)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create nginx location, got error: %s", err))
 		return
@@ -136,7 +136,7 @@ func (r *nginxLocationResource) Update(ctx context.Context, req resource.UpdateR
 
 	location := data.toLocation()
 
-	result, err := r.client.Nginx().NginxEditLocation(ctx, data.Id.ValueString(), location)
+	result, err := r.client.Nginx().NginxEditLocation(ctx, data.Id.ValueString(), &location)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update nginx location, got error: %s", err))
 		return

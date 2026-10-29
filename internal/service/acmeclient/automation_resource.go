@@ -60,7 +60,7 @@ func (r *acmeclientAutomationResource) Create(ctx context.Context, req resource.
 	}
 
 	action := data.toAction()
-	result, err := r.client.Acmeclient().ACMEClientAddAutomation(ctx, action)
+	result, err := r.client.Acmeclient().ACMEClientAddAutomation(ctx, &action)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to create acmeclient automation, got error: %s", err))
@@ -138,7 +138,7 @@ func (r *acmeclientAutomationResource) Update(ctx context.Context, req resource.
 	}
 
 	action := data.toAction()
-	result, err := r.client.Acmeclient().ACMEClientEditAutomation(ctx, data.Id.ValueString(), action)
+	result, err := r.client.Acmeclient().ACMEClientEditAutomation(ctx, data.Id.ValueString(), &action)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to update acmeclient automation, got error: %s", err))

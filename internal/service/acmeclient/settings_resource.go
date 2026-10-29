@@ -65,7 +65,7 @@ func (r *acmeclientSettingsResource) Create(ctx context.Context, req resource.Cr
 
 	// Add settings acmeclientSettings to OPNsense
 	settingsReq := data.toSettingsSetRequest()
-	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, settingsReq)
+	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, &settingsReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to create acmeclient settings, got error: %s", err))
@@ -120,7 +120,7 @@ func (r *acmeclientSettingsResource) Update(ctx context.Context, req resource.Up
 	}
 
 	settingsReq := data.toSettingsSetRequest()
-	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, settingsReq)
+	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, &settingsReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to update acmeclient settings, got error: %s", err))
@@ -159,7 +159,7 @@ func (r *acmeclientSettingsResource) Delete(ctx context.Context, req resource.De
 	settingsReq := resourceModel.toSettingsSetRequest()
 	settingsReq.Settings.Enabled = tools.BoolToString(false)
 
-	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, settingsReq)
+	res, err := r.client.Acmeclient().ACMEClientSetSettings(ctx, &settingsReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to delete settings acmeclientSettings, got error: %s", err))

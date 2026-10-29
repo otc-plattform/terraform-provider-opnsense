@@ -60,7 +60,7 @@ func (r *nginxHTTPServerResource) Create(ctx context.Context, req resource.Creat
 
 	httpServer := data.toHTTPServer()
 
-	result, err := r.client.Nginx().NginxAddHTTPServer(ctx, httpServer)
+	result, err := r.client.Nginx().NginxAddHTTPServer(ctx, &httpServer)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create nginx HTTP server, got error: %s", err))
 		return
@@ -136,7 +136,7 @@ func (r *nginxHTTPServerResource) Update(ctx context.Context, req resource.Updat
 
 	httpServer := data.toHTTPServer()
 
-	result, err := r.client.Nginx().NginxEditHTTPServer(ctx, data.Id.ValueString(), httpServer)
+	result, err := r.client.Nginx().NginxEditHTTPServer(ctx, data.Id.ValueString(), &httpServer)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update nginx HTTP server, got error: %s", err))
 		return

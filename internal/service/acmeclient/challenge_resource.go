@@ -68,7 +68,7 @@ func (r *acmeclientChallengeResource) Create(ctx context.Context, req resource.C
 		return
 	}
 
-	result, err := r.client.Acmeclient().ACMEClientAddChallengeType(ctx, validation)
+	result, err := r.client.Acmeclient().ACMEClientAddChallengeType(ctx, &validation)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to create acmeclient challenge, got error: %s", err))
@@ -152,7 +152,7 @@ func (r *acmeclientChallengeResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	result, err := r.client.Acmeclient().ACMEClientEditChallengeType(ctx, data.Id.ValueString(), validation)
+	result, err := r.client.Acmeclient().ACMEClientEditChallengeType(ctx, data.Id.ValueString(), &validation)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to update acmeclient challenge, got error: %s", err))

@@ -60,7 +60,7 @@ func (r *gatewayResource) Create(ctx context.Context, req resource.CreateRequest
 	}
 
 	request := convertGatewaySchemaToRequest(data)
-	result, err := r.client.Gateway().SettingsAddGateway(ctx, request)
+	result, err := r.client.Gateway().SettingsAddGateway(ctx, &request)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to create gateway, got error: %s", err))
@@ -142,7 +142,7 @@ func (r *gatewayResource) Update(ctx context.Context, req resource.UpdateRequest
 	}
 
 	request := convertGatewaySchemaToRequest(data)
-	result, err := r.client.Gateway().SettingsSetGateway(ctx, request, data.Id.ValueString())
+	result, err := r.client.Gateway().SettingsSetGateway(ctx, &request, data.Id.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error",
 			fmt.Sprintf("Unable to update gateway, got error: %s", err))
